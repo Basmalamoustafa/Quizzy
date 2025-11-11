@@ -19,6 +19,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
     super.initState();
     _updateFilteredFacts();
   }
+
   void _updateFilteredFacts() {
     setState(() {
       if (_selectedMBTI == 'All') {
@@ -66,15 +67,15 @@ class _FunFactScreenState extends State<FunFactScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 24.0),
-              _buildFilterButton(),
-              _buildFilterDropdown(),
-              
-              Expanded(
-                child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildHeader(),
+                const SizedBox(height: 24.0),
+                _buildFilterButton(),
+                _buildFilterDropdown(),
+                const SizedBox(height: 24.0),
+                Center(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     transitionBuilder: (child, animation) {
@@ -89,18 +90,18 @@ class _FunFactScreenState extends State<FunFactScreen> {
                     child: _buildFactCard(currentFact),
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 32.0), 
-              _buildShuffleButton(),
-              const SizedBox(height: 24.0),
-              _buildDotsIndicator(),
-            ],
+                const SizedBox(height: 32.0),
+                _buildShuffleButton(),
+                const SizedBox(height: 24.0),
+                _buildDotsIndicator(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
   Widget _buildHeader() {
     return Column(
       children: [
@@ -115,7 +116,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
           child: const Text(
             "Fun Facts",
             style: TextStyle(
-              fontSize: 30.0, 
+              fontSize: 30.0,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -125,7 +126,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
           "Learn interesting psychology insights",
           style: TextStyle(
             fontSize: 16.0,
-            color: Colors.grey[600], 
+            color: Colors.grey[600],
           ),
         ),
       ],
@@ -134,11 +135,11 @@ class _FunFactScreenState extends State<FunFactScreen> {
 
   Widget _buildFilterButton() {
     final bool isFiltered = _selectedMBTI != 'All';
-    
+
     final filterGradient = const LinearGradient(
       colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
     );
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -168,7 +169,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
                   Icons.filter_list,
                   color: isFiltered ? Colors.white : Colors.grey[700],
                 ),
-                const SizedBox(width: 8.0), 
+                const SizedBox(width: 8.0),
                 Text(
                   "Filter: $_selectedMBTI",
                   style: TextStyle(
@@ -219,15 +220,18 @@ class _FunFactScreenState extends State<FunFactScreen> {
                 return ElevatedButton(
                   onPressed: () => _handleFilterChange(mbti),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                    
-                    backgroundColor: isSelected ? const Color(0xFF8B5CF6) : Colors.grey[100],
-                    foregroundColor: isSelected ? Colors.white : Colors.grey[800],
-                    
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 12.0),
+                    backgroundColor:
+                        isSelected ? const Color(0xFF8B5CF6) : Colors.grey[100],
+                    foregroundColor:
+                        isSelected ? Colors.white : Colors.grey[800],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    shadowColor: isSelected ? const Color(0xFF8B5CF6).withAlpha(128) : Colors.transparent,
+                    shadowColor: isSelected
+                        ? const Color(0xFF8B5CF6).withAlpha(128)
+                        : Colors.transparent,
                     elevation: isSelected ? 5.0 : 0.0,
                   ),
                   child: Text(mbti, style: const TextStyle(fontSize: 14.0)),
@@ -257,7 +261,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, 
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 80,
@@ -277,21 +281,19 @@ class _FunFactScreenState extends State<FunFactScreen> {
                 )
               ],
             ),
-            child: Icon(fact.icon, color: Colors.white, size: 40), 
+            child: Icon(fact.icon, color: Colors.white, size: 40),
           ),
           const SizedBox(height: 24.0),
-
           Text(
             fact.title,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 22.0,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF374151), 
+              color: Color(0xFF374151),
             ),
           ),
           const SizedBox(height: 16.0),
-
           Text(
             fact.fact,
             textAlign: TextAlign.center,
@@ -302,7 +304,6 @@ class _FunFactScreenState extends State<FunFactScreen> {
             ),
           ),
           const SizedBox(height: 24.0),
-
           Text(
             "${_currentFactIndex + 1} of ${_filteredFacts.length}",
             style: TextStyle(
@@ -319,8 +320,8 @@ class _FunFactScreenState extends State<FunFactScreen> {
     return GestureDetector(
       onTap: _shuffleFact,
       child: Container(
-        width: double.infinity, 
-        padding: const EdgeInsets.symmetric(vertical: 16.0), 
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
@@ -335,7 +336,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, 
+          mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Icon(Icons.shuffle, color: Colors.white, size: 20),
             SizedBox(width: 8.0),
@@ -343,7 +344,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
               "Next Fact",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18.0, 
+                fontSize: 18.0,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -368,8 +369,8 @@ class _FunFactScreenState extends State<FunFactScreen> {
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               height: 8.0,
-              width: index == _currentFactIndex ? 32.0 : 8.0, 
-              margin: const EdgeInsets.symmetric(horizontal: 4.0), 
+              width: index == _currentFactIndex ? 32.0 : 8.0,
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
               decoration: BoxDecoration(
                 gradient: index == _currentFactIndex
                     ? const LinearGradient(
@@ -377,11 +378,10 @@ class _FunFactScreenState extends State<FunFactScreen> {
                       )
                     : null,
                 color: index == _currentFactIndex ? null : Colors.grey[300],
-                borderRadius: BorderRadius.circular(4.0), 
+                borderRadius: BorderRadius.circular(4.0),
               ),
             ),
           ),
-
         if (_filteredFacts.length > 10)
           Padding(
             padding: const EdgeInsets.only(left: 4.0),
