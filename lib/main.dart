@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/fun_fact_screen.dart';
+import '/about_screen.dart';
 
 void main() {
   runApp(const MyApp());
