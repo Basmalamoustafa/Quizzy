@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '/fun_fact_screen.dart';
-import '/about_screen.dart';
+import 'pages/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Inter', 
         primarySwatch: Colors.purple,
       ),
-      home: const FunFactScreen(),
+      home: const HomeScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

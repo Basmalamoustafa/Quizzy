@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'fun_fact_model.dart';
+import '../models/fun_fact_model.dart';
 
 class FunFactScreen extends StatefulWidget {
   const FunFactScreen({Key? key}) : super(key: key);
