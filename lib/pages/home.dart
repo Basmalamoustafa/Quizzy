@@ -3,6 +3,7 @@ import 'package:flutter_application_1/pages/about_screen.dart';
 import 'package:flutter_application_1/pages/fun_fact_screen.dart';
 import 'home_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'faq_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>{
   int _selectedIndex = 0;
 
-  static const List<Widget> _screens = <Widget>[
+  static final List<Widget> _screens = <Widget>[
     HomeView(),
     Center(child: Text('Quiz Page Placeholder', style: TextStyle(fontSize: 20))),
     FunFactScreen(),
-    Center(child: Text("FAQ page placeholder", style: TextStyle(fontSize: 20))),
+    FAQScreen(),
     AboutScreen(),
   ];
 

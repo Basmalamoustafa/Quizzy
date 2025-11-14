@@ -3,6 +3,7 @@ import 'package:flutter_application_1/widgets/buildcard.dart';
 import 'package:flutter_application_1/pages/fun_fact_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_application_1/pages/about_screen.dart';
+import 'package:flutter_application_1/pages/faq_screen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -122,7 +123,8 @@ class HomeView extends StatelessWidget {
                 icon: Icons.help_outline,
                 label: 'FAQ',
                 gradientColors: [Colors.green, Colors.teal],
-                onTap: () {},
+                onTap: ()=>Navigator.push(
+                    context,MaterialPageRoute(builder:(context)=>FAQScreen())) ,
               ),
               buildCard(
                 context,
@@ -134,6 +136,7 @@ class HomeView extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => AboutScreen())
                 )
               ),
+
             ],
           ),
           const SizedBox(height: 20),

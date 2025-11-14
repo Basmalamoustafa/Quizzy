@@ -6,6 +6,7 @@ Widget buildCard(
     required String label,
     required List<Color> gradientColors,
     required VoidCallback onTap,
+
   }) {
     return GestureDetector(
       onTap: onTap,
