@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
+import 'pages/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fun Facts App',
+      title: 'Quizzy App',
       theme: ThemeData(
         fontFamily: 'Inter', 
         primarySwatch: Colors.purple,
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(), 
       debugShowCheckedModeBanner: false,
     );
   }
