@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/about_screen.dart';
 import 'package:flutter_application_1/pages/fun_fact_screen.dart';
+import 'package:flutter_application_1/pages/gallery_screen.dart';
 import 'home_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'faq_screen.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen>{
     HomeView(),
     Center(child: Text('Quiz Page Placeholder', style: TextStyle(fontSize: 20))),
     FunFactScreen(),
+    QuoteGalleryScreen(),
     FAQScreen(),
     AboutScreen(),
   ];
@@ -32,9 +34,7 @@ class _HomeScreenState extends State<HomeScreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF7FD),
-      body: _selectedIndex == 0
-          ? const HomeView()
-          : _screens[_selectedIndex],
+      body: _screens[_selectedIndex],
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -55,6 +55,10 @@ class _HomeScreenState extends State<HomeScreen>{
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.bookOpen),
             label: 'Facts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.format_quote_outlined),
+            label: 'Gallery',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.help_outline),
