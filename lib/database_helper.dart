@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'models/user_model.dart';
 import 'models/quiz_model.dart';
+import 'models/question_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -11,7 +12,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('quizzy_v2.db');
+    _database = await _initDB('quizzy_v3.db');
     return _database!;
   }
 
@@ -384,5 +385,17 @@ class DatabaseHelper {
     final result = await db.query('quizzes');
 
     return result.map((map) => Quiz.fromMap(map)).toList();
+  }
+
+  Future<List<Question>> getQuestions(int quizId) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      'questions',
+      where: 'quizId = ?',
+      whereArgs: [quizId],
+      orderBy: 'number ASC',
+    );
+
+    return List.generate(maps.length, (i) => Question.fromMap(maps[i]));
   }
 }

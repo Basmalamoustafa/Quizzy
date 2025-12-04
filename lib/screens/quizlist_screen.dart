@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/quiz_provider.dart';
 import '../models/quiz_model.dart';
+import 'question_screen.dart';
 
 class QuizListScreen extends StatefulWidget {
   const QuizListScreen({super.key});
@@ -14,7 +15,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<QuizProvider>(context, listen: false).loadQuizzes();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<QuizProvider>(context, listen: false).loadQuizzes();
+    });
   }
 
   @override
@@ -93,21 +97,25 @@ class _QuizListScreenState extends State<QuizListScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () {
-            // We will build the Questions Screen next
-            print("Tapped on ${quiz.title}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => QuestionScreen(
+                  quizId: quiz.id!,
+                  quizTitle: quiz.title,
+                ),
+              ),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Image Header
               ClipRRect(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(20)),
                 child: SizedBox(
                   height: 150,
                   width: double.infinity,
-                  // Use AssetImage if you have local files, or NetworkImage for URLs
-                  // Since your json said "/img/...", I assume local assets:
                   child: Image.asset(
                     quiz.imagePath,
                     fit: BoxFit.cover,
