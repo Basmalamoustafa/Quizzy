@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/quiz_provider.dart';
 import '../models/question_model.dart';
+import 'results_screen.dart';
 
 class QuestionScreen extends StatefulWidget {
   final int quizId;
@@ -41,7 +42,15 @@ class _QuestionScreenState extends State<QuestionScreen> {
           _currentIndex++;
         });
       } else {
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultScreen(
+              quizId: widget.quizId,
+              answers: _answers,
+            ),
+          ),
+        );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Quiz Completed!")),
         );
