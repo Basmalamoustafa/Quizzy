@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'pages/login_screen.dart';
+import 'screens/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'providers/quiz_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => QuizProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,10 +22,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quizzy App',
       theme: ThemeData(
-        fontFamily: 'Inter', 
+        fontFamily: 'Inter',
         primarySwatch: Colors.purple,
       ),
-      home: const LoginScreen(), 
+      home: const LoginScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
