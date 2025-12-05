@@ -20,7 +20,7 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade);
   }
 
   Future _createDB(Database db, int version) async {
@@ -85,7 +85,7 @@ class DatabaseHelper {
       return null;
     }
   }
-
+  
   Future<void> _seedData(Database db) async {
     final quizzes = [
       {
@@ -398,4 +398,11 @@ class DatabaseHelper {
 
     return List.generate(maps.length, (i) => Question.fromMap(maps[i]));
   }
+  
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  if (oldVersion < 2) {
+    await db.execute("DROP TABLE IF EXISTS users");
+    await _createDB(db, newVersion);
+  }
 }
+
