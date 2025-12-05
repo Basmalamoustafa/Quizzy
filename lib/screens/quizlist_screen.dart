@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/quiz_provider.dart';
 import '../models/quiz_model.dart';
 import 'question_screen.dart';
+import 'home.dart';
 
 class QuizListScreen extends StatefulWidget {
   const QuizListScreen({super.key});
@@ -31,7 +32,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
             Row(
               children: [
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    context.findAncestorStateOfType<HomeScreenState>()?.switchTab(0);
+                  },
                   icon: const Icon(Icons.arrow_back_ios, color: Colors.grey),
                 ),
                 ShaderMask(
