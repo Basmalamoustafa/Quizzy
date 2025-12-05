@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/buildcard.dart';
-import 'package:flutter_application_1/pages/fun_fact_screen.dart';
+import 'package:flutter_application_1/screens/fun_fact_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_application_1/pages/about_screen.dart';
-import 'package:flutter_application_1/pages/faq_screen.dart';
+import 'package:flutter_application_1/screens/about_screen.dart';
+import 'package:flutter_application_1/screens/faq_screen.dart';
+import 'package:flutter_application_1/screens/home.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -63,13 +64,11 @@ class HomeView extends StatelessWidget {
             ],
           ),
           const Spacer(),
-
           GestureDetector(
-            onTap: () {},
+              onTap: () => (context.findAncestorStateOfType<HomeScreenState>()?.switchTab(1)),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
@@ -104,7 +103,6 @@ class HomeView extends StatelessWidget {
             ),
           ),
           const Spacer(),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -113,30 +111,23 @@ class HomeView extends StatelessWidget {
                 icon: FontAwesomeIcons.bookOpen,
                 label: 'Fun Facts',
                 gradientColors: [Colors.blueAccent, Colors.cyan],
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FunFactScreen())
-                ),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FunFactScreen())),
               ),
               buildCard(
                 context,
                 icon: Icons.help_outline,
                 label: 'FAQ',
                 gradientColors: [Colors.green, Colors.teal],
-                onTap: ()=>Navigator.push(
-                    context,MaterialPageRoute(builder:(context)=>FAQScreen())) ,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FAQScreen())),
               ),
-              buildCard(
-                context,
-                icon: Icons.info_outline,
-                label: 'About',
-                gradientColors: [Colors.orangeAccent, Colors.pinkAccent],
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutScreen())
-                )
-              ),
-
+              buildCard(context,
+                  icon: Icons.info_outline,
+                  label: 'About',
+                  gradientColors: [Colors.orangeAccent, Colors.pinkAccent],
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AboutScreen()))),
             ],
           ),
           const SizedBox(height: 20),
