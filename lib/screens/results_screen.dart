@@ -5,13 +5,13 @@ import 'home.dart';
 class ResultScreen extends StatefulWidget {
   final int quizId;
   final Map<int, String> answers;
-  final User user; // ✅ Added user
+  final User user;
 
   const ResultScreen({
     super.key,
     required this.quizId,
     required this.answers,
-    required this.user, // ✅ Required
+    required this.user,
   });
 
   @override
@@ -30,6 +30,8 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final dominantLetter = _calculateDominantLetter();
     final resultData = _getPersonalityResult(widget.quizId, dominantLetter);
 
@@ -52,13 +54,15 @@ class _ResultScreenState extends State<ResultScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(40),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Colors.black26,
+                      color: theme.colorScheme.onSurface.withOpacity(
+                        theme.brightness == Brightness.dark ? 0.25 : 0.15,
+                      ),
                       blurRadius: 20,
-                      offset: Offset(0, 10),
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),
@@ -75,7 +79,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       "You are...",
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey[600],
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -84,10 +88,10 @@ class _ResultScreenState extends State<ResultScreen> {
                     Text(
                       resultData['title']!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF8B5CF6),
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -95,42 +99,48 @@ class _ResultScreenState extends State<ResultScreen> {
                     Text(
                       resultData['description']!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black54,
                         height: 1.5,
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
 
                     const Spacer(),
 
-                    const Text(
+                    Text(
                       "Rate this quiz:",
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey,
                         fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                     const SizedBox(height: 8),
 
-                    _buildRatingStars(),
+                    _buildRatingStars(theme),
                     const SizedBox(height: 20),
 
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: theme.colorScheme.surface.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.grey[300]!),
+                        border: Border.all(
+                          color: theme.colorScheme.onSurface.withOpacity(0.15),
+                        ),
                       ),
                       child: TextField(
                         controller: _feedbackController,
                         maxLines: 3,
-                        decoration: const InputDecoration(
+                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        decoration: InputDecoration(
                           hintText: "Tell us what you liked or disliked...",
+                          hintStyle: TextStyle(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(10),
+                          contentPadding: const EdgeInsets.all(10),
                         ),
                       ),
                     ),
@@ -145,7 +155,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  HomeScreen(user: widget.user), // ✅ FIXED
+                                  HomeScreen(user: widget.user),
                             ),
                                 (route) => false,
                           );
@@ -169,6 +179,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
               ),
             ),
+
             const SizedBox(height: 40),
           ],
         ),
@@ -177,7 +188,7 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   // ⭐ RATING STARS
-  Widget _buildRatingStars() {
+  Widget _buildRatingStars(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {

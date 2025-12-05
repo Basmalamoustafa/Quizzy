@@ -54,7 +54,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             builder: (context) => ResultScreen(
               quizId: widget.quizId,
               answers: _answers,
-              user: widget.user, // ✅ FIXED — PASS USER
+              user: widget.user,
             ),
           ),
         );
@@ -68,6 +68,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -127,7 +129,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       margin: const EdgeInsets.all(16),
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(
@@ -136,10 +138,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
                           Text(
                             question.questionText,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 40),
@@ -162,36 +164,47 @@ class _QuestionScreenState extends State<QuestionScreen> {
   }
 
   Widget _buildOption(Question q, String key, String text) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: ElevatedButton(
         onPressed: () => _submitAnswer(key),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
+          backgroundColor: theme.colorScheme.surface,
+          foregroundColor: theme.colorScheme.onSurface,
           elevation: 2,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
-            side: const BorderSide(color: Colors.grey, width: 1),
+            side: BorderSide(
+              color: theme.colorScheme.onSurface.withOpacity(0.08),
+              width: 1,
+            ),
           ),
         ),
         child: Row(
           children: [
             CircleAvatar(
               radius: 15,
-              backgroundColor: Colors.grey[200],
+              backgroundColor: theme.colorScheme.onSurface.withOpacity(0.12),
               child: Text(
                 key.toUpperCase(),
-                style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 text,
-                style: const TextStyle(fontSize: 16),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ),
           ],
