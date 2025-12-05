@@ -17,6 +17,13 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   int _userRating = 0;
+  final TextEditingController _feedbackController = TextEditingController();
+
+  @override
+  void dispose() {
+    _feedbackController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +111,26 @@ class _ResultScreenState extends State<ResultScreen> {
                     ),
                     const SizedBox(height: 8),
                     _buildRatingStars(),
+                    const SizedBox(height: 20),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: TextField(
+                        controller: _feedbackController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          hintText: "Tell us what you liked or disliked...",
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(10),
+                        ),
+                      ),
+                    ),
+
                     const SizedBox(height: 20),
 
                     SizedBox(
