@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/quote_model.dart';
 import '../services/api_service.dart';
-import '../widgets/common_widgets.dart'; 
+import '../widgets/common_widgets.dart';
 
 class QuoteGalleryScreen extends StatefulWidget {
   const QuoteGalleryScreen({Key? key}) : super(key: key);
@@ -23,8 +23,12 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: theme.scaffoldBackgroundColor, // ⭐ FIXED
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -40,19 +44,20 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
 
               return SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const GradientHeader(
                       title: "Quotes Gallery",
                       subtitle: "Swipe through inspiring quotes",
                     ),
-                    
+
                     const SizedBox(height: 24),
 
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 400),
                       child: KeyedSubtree(
                         key: ValueKey(currentQuote.text),
-                        child: _buildQuoteContent(currentQuote),
+                        child: _buildQuoteContent(currentQuote, isDark),
                       ),
                     ),
 
@@ -87,36 +92,47 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
     );
   }
 
-  Widget _buildQuoteContent(Quote quote) {
+  Widget _buildQuoteContent(Quote quote, bool isDark) {
     return ContentCard(
+      padding: const EdgeInsets.all(32),
       child: Column(
         children: [
-          const Icon(Icons.format_quote, size: 50, color: Color(0xFF8B5CF6)),
+          Icon(
+            Icons.format_quote,
+            size: 50,
+            color: isDark ? Colors.purpleAccent.shade100 : const Color(0xFF8B5CF6),
+          ),
+
           const SizedBox(height: 16),
+
           Text(
             quote.text,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               height: 1.5,
-              color: Color(0xFF374151),
+              color: isDark ? Colors.white : const Color(0xFF374151),
             ),
           ),
+
           const SizedBox(height: 16),
+
           Text(
             "- ${quote.author}",
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey[600],
+              color: isDark ? Colors.grey[300] : Colors.grey[600],
               fontStyle: FontStyle.italic,
             ),
           ),
+
           const SizedBox(height: 20),
+
           Text(
             "${_currentIndex + 1} of ${quotes.length}",
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[400],
+              color: isDark ? Colors.grey[400] : Colors.grey[400],
             ),
           ),
         ],

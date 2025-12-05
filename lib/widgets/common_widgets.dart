@@ -12,32 +12,33 @@ class GradientHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         const SizedBox(height: 24),
+
         ShaderMask(
           blendMode: BlendMode.srcIn,
-          shaderCallback: (bounds) => const LinearGradient(
-            colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+          shaderCallback: (bounds) => LinearGradient(
+            colors: [
+              theme.colorScheme.primary,
+              theme.colorScheme.secondary,
+            ],
+          ).createShader(bounds),
           child: Text(
             title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
         ),
+
         const SizedBox(height: 8),
+
         Text(
           subtitle,
-          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey[600],
+            color: theme.colorScheme.onBackground.withOpacity(0.7),
           ),
         ),
       ],
@@ -57,17 +58,18 @@ class ContentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
-      width: double.infinity,
       padding: padding,
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(230),
+        color: theme.colorScheme.surface.withOpacity(0.90),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(26),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: theme.colorScheme.onSurface.withOpacity(0.12),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -90,20 +92,25 @@ class GradientActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),
+        width: double.infinity,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+          gradient: LinearGradient(
+            colors: [
+              theme.colorScheme.primary,
+              theme.colorScheme.secondary,
+            ],
           ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF8B5CF6).withAlpha(102),
-              blurRadius: 15,
+              color: theme.colorScheme.primary.withOpacity(0.4),
+              blurRadius: 14,
               offset: const Offset(0, 5),
             )
           ],
@@ -111,14 +118,14 @@ class GradientActionButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(width: 10),
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 8),
             Text(
               text,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -139,15 +146,16 @@ class PaginationDots extends StatelessWidget {
     required this.totalCount,
     required this.currentIndex,
     required this.onDotTap,
-    this.maxVisibleDots = 10,
+    this.maxVisibleDots = 10, // ⭐ limit dots to 10
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (totalCount == 0) return const SizedBox.shrink();
 
+    // ⭐ Visible dots limited to maxVisibleDots
     final int visibleCount =
-        totalCount > maxVisibleDots ? maxVisibleDots : totalCount;
+    totalCount > maxVisibleDots ? maxVisibleDots : totalCount;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -157,7 +165,6 @@ class PaginationDots extends StatelessWidget {
             onTap: () => onDotTap(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
               height: 8,
               width: index == currentIndex ? 32 : 8,
               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -165,8 +172,8 @@ class PaginationDots extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 gradient: index == currentIndex
                     ? const LinearGradient(
-                        colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-                      )
+                  colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+                )
                     : null,
                 color: index == currentIndex
                     ? null
@@ -174,19 +181,11 @@ class PaginationDots extends StatelessWidget {
               ),
             ),
           ),
-        
-        if (totalCount > maxVisibleDots)
-          Padding(
-            padding: const EdgeInsets.only(left: 4.0),
-            child: Text(
-              "+${totalCount - maxVisibleDots}",
-              style: TextStyle(
-                fontSize: 12.0,
-                color: Colors.grey[400],
-              ),
-            ),
-          ),
+
+
       ],
     );
   }
 }
+
+

@@ -27,7 +27,9 @@ class _FunFactScreenState extends State<FunFactScreen> {
         _filteredFacts = List.from(allFunFacts);
       } else {
         _filteredFacts = allFunFacts
-            .where((fact) => fact.category == _selectedMBTI || fact.category == 'All')
+            .where((fact) =>
+        fact.category == _selectedMBTI ||
+            fact.category == 'All')
             .toList();
       }
     });
@@ -44,12 +46,16 @@ class _FunFactScreenState extends State<FunFactScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final FunFact currentFact = _filteredFacts.isNotEmpty
         ? _filteredFacts[_currentFactIndex]
         : allFunFacts[0];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: theme.scaffoldBackgroundColor, // ⭐ FIXED
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -62,49 +68,39 @@ class _FunFactScreenState extends State<FunFactScreen> {
                 ),
 
                 const SizedBox(height: 24.0),
-                
-                _buildFilterButton(),
-                _buildFilterDropdown(),
-                
+
+                _buildFilterButton(isDark),
+                _buildFilterDropdown(isDark),
+
                 const SizedBox(height: 24.0),
-                
-                Center(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: ScaleTransition(scale: animation, child: child),
-                      );
-                    },
-                    child: KeyedSubtree(
-                      key: ValueKey<String>(currentFact.title),
-                      child: _buildFactContent(currentFact),
-                    ),
-                  ),
+
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: _buildFactContent(currentFact, isDark),
                 ),
-                
+
                 const SizedBox(height: 32.0),
-                
+
                 GradientActionButton(
                   text: "Next Fact",
                   icon: Icons.shuffle,
                   onTap: () {
-                     setState(() {
-                        _currentFactIndex = (_currentFactIndex + 1) % _filteredFacts.length;
-                     });
+                    setState(() {
+                      _currentFactIndex =
+                          (_currentFactIndex + 1) % _filteredFacts.length;
+                    });
                   },
                 ),
-                
+
                 const SizedBox(height: 24.0),
-                
+
                 PaginationDots(
                   totalCount: _filteredFacts.length,
                   currentIndex: _currentFactIndex,
                   onDotTap: (index) {
-                     if (index >= 0 && index < _filteredFacts.length) {
-                        setState(() => _currentFactIndex = index);
-                     }
+                    if (index < _filteredFacts.length) {
+                      setState(() => _currentFactIndex = index);
+                    }
                   },
                 ),
               ],
@@ -115,11 +111,10 @@ class _FunFactScreenState extends State<FunFactScreen> {
     );
   }
 
-  Widget _buildFactContent(FunFact fact) {
+  Widget _buildFactContent(FunFact fact, bool isDark) {
     return ContentCard(
       padding: const EdgeInsets.all(32),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 80,
@@ -133,40 +128,31 @@ class _FunFactScreenState extends State<FunFactScreen> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: fact.gradientColors.first.withAlpha(77),
+                  color: fact.gradientColors.first.withOpacity(0.4),
                   blurRadius: 10,
-                  offset: const Offset(0, 5),
                 )
               ],
             ),
             child: Icon(fact.icon, color: Colors.white, size: 40),
           ),
-          const SizedBox(height: 24.0),
+          const SizedBox(height: 24),
           Text(
             fact.title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22.0,
+            style: TextStyle(
+              fontSize: 22,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF374151),
+              color: isDark ? Colors.white : const Color(0xFF374151),
             ),
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 16),
           Text(
             fact.fact,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.grey[600],
+              fontSize: 16,
+              color: isDark ? Colors.grey[300] : Colors.grey[600],
               height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 24.0),
-          Text(
-            "${_currentFactIndex + 1} of ${_filteredFacts.length}",
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.grey[400],
             ),
           ),
         ],
@@ -174,48 +160,40 @@ class _FunFactScreenState extends State<FunFactScreen> {
     );
   }
 
-  Widget _buildFilterButton() {
+  Widget _buildFilterButton(bool isDark) {
     final bool isFiltered = _selectedMBTI != 'All';
 
-    final filterGradient = const LinearGradient(
-      colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-    );
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _showFilter = !_showFilter;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-        decoration: BoxDecoration(
-          gradient: isFiltered ? filterGradient : null,
-          color: isFiltered ? null : Colors.white.withAlpha(204),
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(26),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        gradient: isFiltered
+            ? const LinearGradient(
+          colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+        )
+            : null,
+        color: isFiltered
+            ? null
+            : (isDark ? Colors.white10 : Colors.white),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: GestureDetector(
+        onTap: () => setState(() => _showFilter = !_showFilter),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.filter_list,
-                  color: isFiltered ? Colors.white : Colors.grey[700],
-                ),
-                const SizedBox(width: 8.0),
+                Icon(Icons.filter_list,
+                    color: isFiltered
+                        ? Colors.white
+                        : (isDark ? Colors.white : Colors.grey[700])),
+                const SizedBox(width: 8),
                 Text(
                   "Filter: $_selectedMBTI",
                   style: TextStyle(
-                    color: isFiltered ? Colors.white : Colors.grey[700],
-                    fontWeight: FontWeight.w500,
+                    color: isFiltered
+                        ? Colors.white
+                        : (isDark ? Colors.white : Colors.grey[700]),
                   ),
                 ),
               ],
@@ -223,8 +201,9 @@ class _FunFactScreenState extends State<FunFactScreen> {
             Text(
               "${_filteredFacts.length} facts",
               style: TextStyle(
-                color: isFiltered ? Colors.white70 : Colors.grey[500],
-                fontSize: 14.0,
+                color: isFiltered
+                    ? Colors.white70
+                    : (isDark ? Colors.grey[300] : Colors.grey[500]),
               ),
             ),
           ],
@@ -233,53 +212,36 @@ class _FunFactScreenState extends State<FunFactScreen> {
     );
   }
 
-  Widget _buildFilterDropdown() {
+  Widget _buildFilterDropdown(bool isDark) {
     return Visibility(
       visible: _showFilter,
       child: Container(
-        margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha(242),
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(38),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            )
-          ],
+          color: isDark ? Colors.white10 : Colors.white,
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Container(
-          constraints: const BoxConstraints(maxHeight: 256.0),
-          child: SingleChildScrollView(
-            child: Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: mbtiTypes.map((mbti) {
-                final bool isSelected = _selectedMBTI == mbti;
-                return ElevatedButton(
-                  onPressed: () => _handleFilterChange(mbti),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 12.0),
-                    backgroundColor:
-                        isSelected ? const Color(0xFF8B5CF6) : Colors.grey[100],
-                    foregroundColor:
-                        isSelected ? Colors.white : Colors.grey[800],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    shadowColor: isSelected
-                        ? const Color(0xFF8B5CF6).withAlpha(128)
-                        : Colors.transparent,
-                    elevation: isSelected ? 5.0 : 0.0,
-                  ),
-                  child: Text(mbti, style: const TextStyle(fontSize: 14.0)),
-                );
-              }).toList(),
-            ),
-          ),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: mbtiTypes.map((mbti) {
+            final bool isSelected = _selectedMBTI == mbti;
+
+            return ElevatedButton(
+              onPressed: () => _handleFilterChange(mbti),
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                isSelected ? const Color(0xFF8B5CF6) : (isDark ? Colors.black26 : Colors.grey[100]),
+                foregroundColor:
+                isSelected ? Colors.white : (isDark ? Colors.white : Colors.grey[800]),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(mbti),
+            );
+          }).toList(),
         ),
       ),
     );

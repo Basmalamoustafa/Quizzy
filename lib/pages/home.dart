@@ -1,39 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/about_screen.dart';
-import 'package:flutter_application_1/pages/fun_fact_screen.dart';
-import 'package:flutter_application_1/pages/gallery_screen.dart';
-import 'home_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../models/user_model.dart';
+import 'home_view.dart';
+import 'fun_fact_screen.dart';
+import 'gallery_screen.dart';
 import 'faq_screen.dart';
+import 'about_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final User user;  // ⭐ we now pass the logged-in user
+
+  const HomeScreen({super.key, required this.user});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-class _HomeScreenState extends State<HomeScreen>{
+
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static final List<Widget> _screens = <Widget>[
-    HomeView(),
-    Center(child: Text('Quiz Page Placeholder', style: TextStyle(fontSize: 20))),
-    FunFactScreen(),
-    QuoteGalleryScreen(),
-    FAQScreen(),
-    AboutScreen(),
-  ];
+  late List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // ⭐ PASS USER TO ANY SCREEN THAT NEEDS IT (HomeView & Profile)
+    _screens = [
+      HomeView(user: widget.user),
+      Center(child: Text('Quiz Page Placeholder', style: TextStyle(fontSize: 20))),
+      FunFactScreen(),
+      QuoteGalleryScreen(),
+      FAQScreen(),
+      ProfileScreen(user: widget.user),
+    ];
+  }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7FD),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _screens[_selectedIndex],
 
       bottomNavigationBar: BottomNavigationBar(
@@ -43,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen>{
         onTap: _onItemTapped,
         selectedItemColor: const Color(0xFF7F00FF),
         unselectedItemColor: Colors.grey,
+
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -65,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen>{
             label: 'FAQ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info_outline),
-            label: 'About',
+            icon: Icon(Icons.person_outline), // ⭐ PROFILE TAB
+            label: 'Profile',
           ),
         ],
       ),

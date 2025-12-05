@@ -15,82 +15,102 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      
-      final user = await DatabaseHelper.instance.loginUser(
-        _emailController.text,
-        _passwordController.text,
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final user = await DatabaseHelper.instance.loginUser(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    if (user != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Welcome back, ${user.name}!'),
+          backgroundColor: const Color(0xFF7F00FF),
+        ),
       );
 
-      if (!mounted) return;
-
-      if (user != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Welcome back, ${user.name}!'),
-            backgroundColor: const Color(0xFF7F00FF),
-          ),
-        );
-        
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Invalid Email or Password'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => HomeScreen(user: user)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid Email or Password'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7FD),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.auto_awesome, size: 80, color: Color(0xFF7F00FF)),
+                // OLD LOGO (purple icon)
+                const Icon(
+                  Icons.auto_awesome,
+                  size: 80,
+                  color: Color(0xFF7F00FF),
+                ),
+
                 const SizedBox(height: 20),
-                const Text("Welcome Back!", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF7F00FF))),
+
+                const Text(
+                  "Welcome Back!",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF7F00FF),
+                  ),
+                ),
+
                 const SizedBox(height: 40),
 
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: "Email",
-                    border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email_outlined),
+                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
-                     if (value == null || !value.contains('@')) return 'Invalid email';
-                     return null;
+                    if (value == null || !value.contains("@")) {
+                      return "Enter a valid email";
+                    }
+                    return null;
                   },
                 ),
+
                 const SizedBox(height: 16),
-                
+
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: "Password",
-                    border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.lock_outline),
+                    border: OutlineInputBorder(),
                   ),
-                  validator: (value) => value!.isEmpty ? "Enter password" : null,
+                  validator: (v) => v!.isEmpty ? "Enter your password" : null,
                 ),
+
                 const SizedBox(height: 24),
 
+                // OLD BUTTON COLOR (solid purple)
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -98,19 +118,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _handleLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7F00FF),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                    child: const Text("Login", style: TextStyle(color: Colors.white, fontSize: 16)),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ),
+
                 const SizedBox(height: 16),
-                
+
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const SignUpScreen()),
+                    );
                   },
                   child: const Text("New to Quizzy? Create Account"),
-                )
+                ),
               ],
             ),
           ),

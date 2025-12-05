@@ -19,8 +19,8 @@ class FAQItem extends StatefulWidget {
 class _FAQItemState extends State<FAQItem> with TickerProviderStateMixin {
   bool _expanded = false;
 
-  AnimationController? _arrowController;
-  Animation<double>? _arrowAnim;
+  late AnimationController _arrowController;
+  late Animation<double> _arrowAnim;
 
   @override
   void initState() {
@@ -33,34 +33,23 @@ class _FAQItemState extends State<FAQItem> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 260),
     );
 
-    _arrowAnim = Tween<double>(
-      begin: 0.0,
-      end: 0.5,
-    ).animate(
-      CurvedAnimation(
-        parent: _arrowController!,
-        curve: Curves.easeInOut,
-      ),
+    _arrowAnim = Tween<double>(begin: 0, end: 0.5).animate(
+      CurvedAnimation(parent: _arrowController, curve: Curves.easeInOut),
     );
 
-    // if initially expanded, jump to end
-    if (_expanded) _arrowController!.value = 1.0;
+    if (_expanded) _arrowController.value = 1.0;
   }
 
   @override
   void dispose() {
-    _arrowController?.dispose();
+    _arrowController.dispose();
     super.dispose();
   }
 
   void _toggle() {
     setState(() {
       _expanded = !_expanded;
-      if (_expanded) {
-        _arrowController?.forward();
-      } else {
-        _arrowController?.reverse();
-      }
+      _expanded ? _arrowController.forward() : _arrowController.reverse();
     });
   }
 
@@ -81,23 +70,30 @@ class _FAQItemState extends State<FAQItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final surface = theme.colorScheme.surface;
+    final onSurface = theme.colorScheme.onSurface;
+
     final faq = widget.faq;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-          child: Container(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.82),
+              color: surface.withOpacity(0.85),
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: Colors.black.withOpacity(
+                    theme.brightness == Brightness.dark ? 0.40 : 0.12,
+                  ),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
@@ -106,39 +102,22 @@ class _FAQItemState extends State<FAQItem> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: _toggle,
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     child: Row(
                       children: [
-                        // gradient icon circle
+                        // Gradient circle
                         Container(
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
                             gradient: LinearGradient(
+                              colors: faq.gradientColors.map((c) => Color(c)).toList(),
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                              colors: faq.gradientColors
-                                  .map((c) => Color(c))
-                                  .toList(),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(faq.gradientColors.first)
-                                    .withOpacity(0.2),
-                                blurRadius: 12,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
+                            shape: BoxShape.circle,
                           ),
-                          child: Center(
-                            child: Icon(
-                              _mapIcon(faq.icon),
-                              color: Colors.white,
-                              size: 22,
-                            ),
-                          ),
+                          child: Icon(_mapIcon(faq.icon), color: Colors.white),
                         ),
 
                         const SizedBox(width: 14),
@@ -146,19 +125,19 @@ class _FAQItemState extends State<FAQItem> with TickerProviderStateMixin {
                         Expanded(
                           child: Text(
                             faq.question,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1F2937),
+                              color: onSurface,
                             ),
                           ),
                         ),
 
                         RotationTransition(
-                          turns: _arrowAnim ?? AlwaysStoppedAnimation(0),
-                          child: const Icon(
+                          turns: _arrowAnim,
+                          child: Icon(
                             Icons.expand_more,
-                            color: Color(0xFF9CA3AF),
+                            color: onSurface.withOpacity(0.7),
                           ),
                         ),
                       ],
@@ -166,22 +145,20 @@ class _FAQItemState extends State<FAQItem> with TickerProviderStateMixin {
                   ),
                 ),
 
-                // animated answer
                 AnimatedSize(
                   duration: const Duration(milliseconds: 280),
-                  curve: Curves.easeInOut,
                   child: ConstrainedBox(
                     constraints: _expanded
                         ? const BoxConstraints()
                         : const BoxConstraints(maxHeight: 0),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(86, 0, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
                       child: Text(
                         faq.answer,
-                        style: const TextStyle(
-                          color: Color(0xFF4B5563),
-                          height: 1.6,
+                        style: TextStyle(
                           fontSize: 14,
+                          height: 1.5,
+                          color: onSurface.withOpacity(0.7),
                         ),
                       ),
                     ),
