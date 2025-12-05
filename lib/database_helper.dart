@@ -20,7 +20,12 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade);
+    return await openDatabase(
+        path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade, onConfigure: _onConfigure);
+  }
+
+  Future _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
   }
 
   Future _createDB(Database db, int version) async {
@@ -66,6 +71,16 @@ class DatabaseHelper {
     await _seedData(db);
   }
 
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      await db.execute("DROP TABLE IF EXISTS questions");
+      await db.execute("DROP TABLE IF EXISTS quizzes");
+      await db.execute("DROP TABLE IF EXISTS users");
+
+      await _createDB(db, newVersion);
+    }
+  }
+
   Future<int> registerUser(User user) async {
     final db = await instance.database;
     return await db.insert('users', user.toMap());
@@ -85,7 +100,7 @@ class DatabaseHelper {
       return null;
     }
   }
-  
+
   Future<void> _seedData(Database db) async {
     final quizzes = [
       {
@@ -115,7 +130,11 @@ class DatabaseHelper {
     ];
 
     for (var quiz in quizzes) {
-      await db.insert('quizzes', quiz);
+      await db.insert(
+        'quizzes',
+        quiz,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
 
     final q1 = [
@@ -398,11 +417,4 @@ class DatabaseHelper {
 
     return List.generate(maps.length, (i) => Question.fromMap(maps[i]));
   }
-  
-  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-  if (oldVersion < 2) {
-    await db.execute("DROP TABLE IF EXISTS users");
-    await _createDB(db, newVersion);
-  }
 }
-
