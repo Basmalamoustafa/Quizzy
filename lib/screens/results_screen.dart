@@ -66,116 +66,129 @@ class _ResultScreenState extends State<ResultScreen> {
                     ),
                   ],
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      resultData['emoji']!,
-                      style: const TextStyle(fontSize: 80),
-                    ),
-                    const SizedBox(height: 24),
 
-                    Text(
-                      "You are...",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
-                        fontWeight: FontWeight.w500,
+                // ⭐ THIS SCROLL FIX PREVENTS ALL OVERFLOWS
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        resultData['emoji']!,
+                        style: const TextStyle(fontSize: 80),
                       ),
-                    ),
-                    const SizedBox(height: 8),
+                      const SizedBox(height: 24),
 
-                    Text(
-                      resultData['title']!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    Text(
-                      resultData['description']!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.5,
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    Text(
-                      "Rate this quiz:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    _buildRatingStars(theme),
-                    const SizedBox(height: 20),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: theme.colorScheme.onSurface.withOpacity(0.15),
+                      Text(
+                        "You are...",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      child: TextField(
-                        controller: _feedbackController,
-                        maxLines: 3,
-                        style: TextStyle(color: theme.colorScheme.onSurface),
-                        decoration: InputDecoration(
-                          hintText: "Tell us what you liked or disliked...",
-                          hintStyle: TextStyle(
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.all(10),
+                      const SizedBox(height: 8),
+
+                      Text(
+                        resultData['title']!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 24),
 
-                    const SizedBox(height: 20),
+                      Text(
+                        resultData['description']!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
 
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  HomeScreen(user: widget.user),
-                            ),
-                                (route) => false,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: const Color(0xFFEC4899),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                      const SizedBox(height: 30),
+
+                      Text(
+                        "Rate this quiz:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color:
+                          theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+
+                      _buildRatingStars(theme),
+                      const SizedBox(height: 20),
+
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color:
+                          theme.colorScheme.surface.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: theme.colorScheme.onSurface
+                                .withOpacity(0.15),
                           ),
                         ),
-                        child: const Text(
-                          "Back to Home",
+                        child: TextField(
+                          controller: _feedbackController,
+                          maxLines: 3,
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              color: theme.colorScheme.onSurface),
+                          decoration: InputDecoration(
+                            hintText:
+                            "Tell us what you liked or disliked...",
+                            hintStyle: TextStyle(
+                              color: theme.colorScheme.onSurface
+                                  .withOpacity(0.5),
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+
+                      const SizedBox(height: 20),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(user: widget.user),
+                              ),
+                                  (route) => false,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 16),
+                            backgroundColor: const Color(0xFFEC4899),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text(
+                            "Back to Home",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -187,7 +200,6 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  // ⭐ RATING STARS
   Widget _buildRatingStars(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +231,6 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  // ⭐ Count dominant answer letter
   String _calculateDominantLetter() {
     int a = 0, b = 0, c = 0, d = 0;
 
@@ -238,7 +249,6 @@ class _ResultScreenState extends State<ResultScreen> {
     return 'd';
   }
 
-  // ⭐ Result Text
   Map<String, String> _getPersonalityResult(int quizId, String letter) {
     if (quizId == 1) {
       switch (letter) {
