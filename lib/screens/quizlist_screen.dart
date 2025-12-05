@@ -6,7 +6,7 @@ import '../models/user_model.dart';
 import 'question_screen.dart';
 
 class QuizListScreen extends StatefulWidget {
-  final User user; // ✅ REQUIRED
+  final User user;
 
   const QuizListScreen({super.key, required this.user});
 
@@ -18,7 +18,6 @@ class _QuizListScreenState extends State<QuizListScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<QuizProvider>(context, listen: false).loadQuizzes();
     });
@@ -26,11 +25,15 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Container(
         padding: const EdgeInsets.only(top: 60, left: 24, right: 24),
         child: Column(
           children: [
+
             Row(
               children: [
                 IconButton(
@@ -55,6 +58,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
             const SizedBox(height: 20),
 
+            // QUIZ LIST
             Expanded(
               child: Consumer<QuizProvider>(
                 builder: (context, provider, child) {
@@ -84,16 +88,20 @@ class _QuizListScreenState extends State<QuizListScreen> {
   }
 
   Widget _buildQuizCard(Quiz quiz) {
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 5),
+            color: theme.colorScheme.primary.withOpacity(
+              theme.brightness == Brightness.dark ? 0.35 : 0.15,
+            ),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -108,7 +116,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 builder: (context) => QuestionScreen(
                   quizId: quiz.id!,
                   quizTitle: quiz.title,
-                  user: widget.user, // ✅ FIXED — PASS USER
+                  user: widget.user,
                 ),
               ),
             );
@@ -117,8 +125,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                 child: SizedBox(
                   height: 150,
                   width: double.infinity,
@@ -136,9 +143,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
                   children: [
                     Text(
                       quiz.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -146,8 +154,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
                       quiz.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style:
-                      TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
                     ),
                   ],
                 ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: const ColorScheme.light(
@@ -22,7 +21,7 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(
       primary: Color(0xFF6D28D9),
       secondary: Color(0xFFBE185D),
-      background: Color(0xFF0F0A1C),   // purple-tinted dark mode
+      background: Color(0xFF0F0A1C),
       surface: Color(0xFF1A1028),
       onSurface: Colors.white70,
       onBackground: Colors.white70,
