@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   final int quizId;
   final Map<int, String> answers;
 
@@ -12,9 +12,23 @@ class ResultScreen extends StatelessWidget {
   });
 
   @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  int _userRating = 0;
+  final TextEditingController _feedbackController = TextEditingController();
+
+  @override
+  void dispose() {
+    _feedbackController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dominantLetter = _calculateDominantLetter();
-    final resultData = _getPersonalityResult(quizId, dominantLetter);
+    final resultData = _getPersonalityResult(widget.quizId, dominantLetter);
 
     return Scaffold(
       body: Container(
@@ -87,13 +101,46 @@ class ResultScreen extends StatelessWidget {
 
                     const Spacer(),
 
+                    const Text(
+                      "Rate this quiz:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildRatingStars(),
+                    const SizedBox(height: 20),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: TextField(
+                        controller: _feedbackController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          hintText: "Tell us what you liked or disliked...",
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(10),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
                                 (route) => false,
                           );
                         },
@@ -107,7 +154,8 @@ class ResultScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           "Back to Home",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -122,10 +170,41 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildRatingStars() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (index) {
+        return IconButton(
+          onPressed: () {
+            setState(() {
+              _userRating = index + 1;
+            });
+
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("You rated it ${index + 1} stars!"),
+                duration: const Duration(milliseconds: 500),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          icon: Icon(
+            index < _userRating ? Icons.star : Icons.star_border,
+            color: Colors.amber,
+            size: 32,
+          ),
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
+        );
+      }),
+    );
+  }
+
   String _calculateDominantLetter() {
     int a = 0, b = 0, c = 0, d = 0;
 
-    answers.values.forEach((v) {
+    widget.answers.values.forEach((v) {
       if (v == 'a') a++;
       if (v == 'b') b++;
       if (v == 'c') c++;
