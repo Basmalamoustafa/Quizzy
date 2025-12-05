@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/quiz_provider.dart';
 import '../models/question_model.dart';
+import '../models/user_model.dart';
 import 'results_screen.dart';
 
 class QuestionScreen extends StatefulWidget {
   final int quizId;
   final String quizTitle;
+  final User user;
 
   const QuestionScreen({
     super.key,
     required this.quizId,
-    required this.quizTitle
+    required this.quizTitle,
+    required this.user,
   });
 
   @override
@@ -27,7 +30,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<QuizProvider>(context, listen: false).loadQuestions(widget.quizId);
+      Provider.of<QuizProvider>(context, listen: false)
+          .loadQuestions(widget.quizId);
     });
   }
 
@@ -37,7 +41,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
     });
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      if (_currentIndex < Provider.of<QuizProvider>(context, listen: false).currentQuestions.length - 1) {
+      final provider = Provider.of<QuizProvider>(context, listen: false);
+
+      if (_currentIndex < provider.currentQuestions.length - 1) {
         setState(() {
           _currentIndex++;
         });
@@ -48,9 +54,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
             builder: (context) => ResultScreen(
               quizId: widget.quizId,
               answers: _answers,
+              user: widget.user, // ✅ FIXED — PASS USER
             ),
           ),
         );
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Quiz Completed!")),
         );
@@ -73,11 +81,15 @@ class _QuestionScreenState extends State<QuestionScreen> {
           child: Consumer<QuizProvider>(
             builder: (context, provider, child) {
               if (provider.isLoading) {
-                return const Center(child: CircularProgressIndicator(color: Colors.white));
+                return const Center(
+                    child: CircularProgressIndicator(color: Colors.white));
               }
 
               if (provider.currentQuestions.isEmpty) {
-                return const Center(child: Text("No questions found", style: TextStyle(color: Colors.white)));
+                return const Center(
+                  child: Text("No questions found",
+                      style: TextStyle(color: Colors.white)),
+                );
               }
 
               final question = provider.currentQuestions[_currentIndex];
@@ -85,7 +97,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
               return Column(
                 children: [
-                  // Header
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Row(
@@ -132,7 +143,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                             ),
                           ),
                           const SizedBox(height: 40),
-                          // Options
+
                           _buildOption(question, 'a', question.optionA),
                           _buildOption(question, 'b', question.optionB),
                           _buildOption(question, 'c', question.optionC),
@@ -170,7 +181,11 @@ class _QuestionScreenState extends State<QuestionScreen> {
             CircleAvatar(
               radius: 15,
               backgroundColor: Colors.grey[200],
-              child: Text(key.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+              child: Text(
+                key.toUpperCase(),
+                style:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(

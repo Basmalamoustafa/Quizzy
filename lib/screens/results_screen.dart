@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import '../models/user_model.dart';
 import 'home.dart';
 
 class ResultScreen extends StatefulWidget {
   final int quizId;
   final Map<int, String> answers;
+  final User user; // ✅ Added user
 
   const ResultScreen({
     super.key,
     required this.quizId,
     required this.answers,
+    required this.user, // ✅ Required
   });
 
   @override
@@ -110,6 +113,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
+
                     _buildRatingStars(),
                     const SizedBox(height: 20),
 
@@ -140,7 +144,9 @@ class _ResultScreenState extends State<ResultScreen> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HomeScreen()),
+                              builder: (context) =>
+                                  HomeScreen(user: widget.user), // ✅ FIXED
+                            ),
                                 (route) => false,
                           );
                         },
@@ -170,6 +176,7 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
+  // ⭐ RATING STARS
   Widget _buildRatingStars() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -201,6 +208,7 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
+  // ⭐ Count dominant answer letter
   String _calculateDominantLetter() {
     int a = 0, b = 0, c = 0, d = 0;
 
@@ -219,35 +227,112 @@ class _ResultScreenState extends State<ResultScreen> {
     return 'd';
   }
 
+  // ⭐ Result Text
   Map<String, String> _getPersonalityResult(int quizId, String letter) {
-
     if (quizId == 1) {
       switch (letter) {
-        case 'a': return {'emoji': '📚', 'title': 'The Intellectual', 'description': 'You value knowledge and peace. You handle conflicts calmly and love getting lost in a good book.'};
-        case 'b': return {'emoji': '🦁', 'title': 'The Bold Leader', 'description': 'You are outgoing, brave, and love taking charge. Challenges don\'t scare you; they fuel you.'};
-        case 'c': return {'emoji': '🤝', 'title': 'The Loyal Friend', 'description': 'Relationships are everything to you. You are supportive, kind, and the glue that holds your group together.'};
-        case 'd': return {'emoji': '🎨', 'title': 'The Creative Soul', 'description': 'You love trying new things and exploring the unknown. Routine bores you; adventure calls you.'};
+        case 'a':
+          return {
+            'emoji': '📚',
+            'title': 'The Intellectual',
+            'description':
+            'You value knowledge and peace. You handle conflicts calmly and love getting lost in a good book.'
+          };
+        case 'b':
+          return {
+            'emoji': '🦁',
+            'title': 'The Bold Leader',
+            'description':
+            'You are outgoing, brave, and love taking charge. Challenges don\'t scare you; they fuel you.'
+          };
+        case 'c':
+          return {
+            'emoji': '🤝',
+            'title': 'The Loyal Friend',
+            'description':
+            'Relationships are everything to you. You are supportive, kind, and the glue that holds your group together.'
+          };
+        case 'd':
+          return {
+            'emoji': '🎨',
+            'title': 'The Creative Soul',
+            'description':
+            'You love trying new things and exploring the unknown. Routine bores you; adventure calls you.'
+          };
       }
     }
 
     if (quizId == 2) {
       switch (letter) {
-        case 'a': return {'emoji': '🎯', 'title': 'The Achiever', 'description': 'You are driven by goals and results. You likely have a detailed plan for the next 5 years.'};
-        case 'b': return {'emoji': '🌍', 'title': 'The Explorer', 'description': 'You work to live, not live to work. You value experiences and freedom over strict routines.'};
-        case 'c': return {'emoji': '🎓', 'title': 'The Scholar', 'description': 'You are deeply analytical and love research. You handle criticism well because you want to improve.'};
-        case 'd': return {'emoji': '🚀', 'title': 'The Entrepreneur', 'description': 'You follow your passion. You likely prefer working on your own projects rather than a 9-to-5.'};
+        case 'a':
+          return {
+            'emoji': '🎯',
+            'title': 'The Achiever',
+            'description':
+            'You are driven by goals and results. You likely have a detailed plan for the next 5 years.'
+          };
+        case 'b':
+          return {
+            'emoji': '🌍',
+            'title': 'The Explorer',
+            'description':
+            'You work to live, not live to work. You value experiences and freedom over strict routines.'
+          };
+        case 'c':
+          return {
+            'emoji': '🎓',
+            'title': 'The Scholar',
+            'description':
+            'You are deeply analytical and love research. You handle criticism well because you want to improve.'
+          };
+        case 'd':
+          return {
+            'emoji': '🚀',
+            'title': 'The Entrepreneur',
+            'description':
+            'You follow your passion. You likely prefer working on your own projects rather than a 9-to-5.'
+          };
       }
     }
 
     if (quizId == 3) {
       switch (letter) {
-        case 'a': return {'emoji': '🧘', 'title': 'The Balanced Realist', 'description': 'You value stability, peace, and personal growth. You approach life with a calm, practical mindset and handle stress by taking care of yourself.'};
-        case 'b': return {'emoji': '✨', 'title': 'The Passionate Dreamer', 'description': 'You follow your instincts and prioritize happiness. You aren\'t afraid to dream big, explore new places, and enjoy the beauty of the moment.'};
-        case 'c': return {'emoji': '❤️', 'title': 'The Heartfelt Connector', 'description': 'Success to you is defined by the people you love. You are deeply supportive, cherish your relationships, and find joy in shared experiences.'};
-        case 'd': return {'emoji': '🧠', 'title': 'The Strategic Thinker', 'description': 'You are logical, goal-oriented, and love learning. You tackle problems head-on with a plan and constantly strive to build a meaningful legacy.'};
+        case 'a':
+          return {
+            'emoji': '🧘',
+            'title': 'The Balanced Realist',
+            'description':
+            'You value stability, peace, and personal growth. You approach life with a calm mindset and handle stress thoughtfully.'
+          };
+        case 'b':
+          return {
+            'emoji': '✨',
+            'title': 'The Passionate Dreamer',
+            'description':
+            'You follow your instincts and prioritize happiness. You love exploring and enjoying the moment.'
+          };
+        case 'c':
+          return {
+            'emoji': '❤️',
+            'title': 'The Heartfelt Connector',
+            'description':
+            'Success to you is defined by the people you love. You cherish deep relationships and shared experiences.'
+          };
+        case 'd':
+          return {
+            'emoji': '🧠',
+            'title': 'The Strategic Thinker',
+            'description':
+            'You are logical, goal-driven, and love learning. You tackle problems with a plan and strive for meaningful impact.'
+          };
       }
     }
 
-    return {'emoji': '✨', 'title': 'Unique Spirit', 'description': 'You have a balanced personality with a mix of many great traits!'};
+    return {
+      'emoji': '✨',
+      'title': 'Unique Spirit',
+      'description':
+      'You have a balanced personality with a mix of many great traits!'
+    };
   }
 }

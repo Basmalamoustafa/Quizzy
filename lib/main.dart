@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
-import 'pages/login_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'providers/quiz_provider.dart';
+import 'providers/theme_provider.dart';  // ⭐ ADD THIS
+import 'screens/login_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => QuizProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()), // ⭐ ADD THIS
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context); // ⭐ READ THEME
+
     return MaterialApp(
       title: 'Quizzy App',
-      theme: ThemeData(
-        fontFamily: 'Inter', 
-        primarySwatch: Colors.purple,
-      ),
-      home: const LoginScreen(), 
       debugShowCheckedModeBanner: false,
+
+      // ⭐ DARK MODE WORKS EVERYWHERE NOW
+      themeMode: themeProvider.themeMode,
+      theme: ThemeProvider.lightTheme,
+      darkTheme: ThemeProvider.darkTheme,
+
+      home: const LoginScreen(),
     );
   }
 }

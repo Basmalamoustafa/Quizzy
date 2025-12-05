@@ -58,34 +58,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     final imageToShow = _newImage != null
         ? FileImage(_newImage!)
-        : (_user.profileImagePath != null &&
-        _user.profileImagePath!.isNotEmpty
+        : (_user.profileImagePath != null && _user.profileImagePath!.isNotEmpty
         ? FileImage(File(_user.profileImagePath!))
         : null);
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
+        title: const Text("My Profile"),
         centerTitle: true,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: const Text(
-          "My Profile",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        ),
+        backgroundColor: Colors.purple,
+        foregroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.push(
                 context,
@@ -97,12 +86,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         ],
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 24),
 
-            // ⭐ Profile Avatar
+            /// ⭐ PROFILE PICTURE
             CircleAvatar(
               radius: 65,
               backgroundColor: Colors.purple.shade100,
@@ -134,25 +124,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 20),
 
-            // ⭐ Change Photo Button
             ElevatedButton(
               onPressed: _pickImage,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8B5CF6),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                backgroundColor: Colors.purple,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-              child: const Text(
-                "Change Photo",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text("Change Photo",
+                  style: TextStyle(color: Colors.white)),
             ),
 
             const SizedBox(height: 40),
 
-            // ⭐ LOGOUT — BRAND GRADIENT BUTTON
+            /// ⭐ LOGOUT BUTTON
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: GestureDetector(
@@ -162,17 +148,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(14),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF8B5CF6).withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
                   ),
                   child: const Center(
                     child: Text(

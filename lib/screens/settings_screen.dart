@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 import '../providers/theme_provider.dart';
-import '../pages/faq_screen.dart';
-import '../pages/about_screen.dart';
+import 'faq_screen.dart';
+import 'about_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final User user;
@@ -14,6 +14,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -26,7 +27,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
-          /// 🌙 DARK MODE SWITCH
+
+          /// 🌙 THEME SWITCH (FULLY WORKING)
           SwitchListTile(
             title: const Text("Dark Mode"),
             value: themeProvider.isDark,
@@ -36,39 +38,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.lock_outline),
             title: const Text("Change Password"),
-            onTap: () {},
+            onTap: () {
+              // TODO: implement real password change
+            },
           ),
 
           ListTile(
             leading: const Icon(Icons.delete_outline),
             title: const Text("Delete Account"),
-            onTap: () {},
+            onTap: () {
+              // TODO: implement delete account logic
+            },
           ),
 
           const Divider(),
 
-          /// 🚀 About Screen
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text("About Quizzy"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AboutScreen()),
-              );
-            },
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AboutScreen()),
+            ),
           ),
 
-          /// 🔥 REAL FAQ PAGE REDIRECT
           ListTile(
             leading: const Icon(Icons.help_outline),
             title: const Text("FAQ"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => FAQScreen()),
-              );
-            },
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => FAQScreen()),
+            ),
           ),
         ],
       ),

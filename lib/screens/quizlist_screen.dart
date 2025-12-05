@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/quiz_provider.dart';
 import '../models/quiz_model.dart';
+import '../models/user_model.dart';
 import 'question_screen.dart';
-import 'home.dart';
 
 class QuizListScreen extends StatefulWidget {
-  const QuizListScreen({super.key});
+  final User user; // ✅ REQUIRED
+
+  const QuizListScreen({super.key, required this.user});
 
   @override
   State<QuizListScreen> createState() => _QuizListScreenState();
@@ -32,9 +34,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
             Row(
               children: [
                 IconButton(
-                  onPressed: () {
-                    context.findAncestorStateOfType<HomeScreenState>()?.switchTab(0);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back_ios, color: Colors.grey),
                 ),
                 ShaderMask(
@@ -52,7 +52,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 ),
               ],
             ),
+
             const SizedBox(height: 20),
+
             Expanded(
               child: Consumer<QuizProvider>(
                 builder: (context, provider, child) {
@@ -106,6 +108,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 builder: (context) => QuestionScreen(
                   quizId: quiz.id!,
                   quizTitle: quiz.title,
+                  user: widget.user, // ✅ FIXED — PASS USER
                 ),
               ),
             );
@@ -115,25 +118,17 @@ class _QuizListScreenState extends State<QuizListScreen> {
             children: [
               ClipRRect(
                 borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
+                const BorderRadius.vertical(top: Radius.circular(20)),
                 child: SizedBox(
                   height: 150,
                   width: double.infinity,
                   child: Image.asset(
                     quiz.imagePath,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.image_not_supported,
-                            color: Colors.grey),
-                      );
-                    },
                   ),
                 ),
               ),
 
-              // 2. Content
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -144,28 +139,15 @@ class _QuizListScreenState extends State<QuizListScreen> {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       quiz.description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        _buildBadge(
-                            Icons.access_time, quiz.estimatedTime, Colors.blue),
-                        const SizedBox(width: 12),
-                        _buildBadge(Icons.person_outline,
-                            "${quiz.ageRange} yrs", Colors.purple),
-                      ],
+                      style:
+                      TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -173,31 +155,6 @@ class _QuizListScreenState extends State<QuizListScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildBadge(IconData icon, String text, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 6),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-        ],
       ),
     );
   }

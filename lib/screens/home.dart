@@ -1,35 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/about_screen.dart';
-import 'package:flutter_application_1/pages/fun_fact_screen.dart';
-import 'package:flutter_application_1/pages/gallery_screen.dart';
-import 'home_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../models/user_model.dart';
+import 'profile_screen.dart';
+import 'quizlist_screen.dart';
+import 'home_view.dart';
+import 'fun_fact_screen.dart';
+import 'gallery_screen.dart';
 import 'faq_screen.dart';
 
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final User user;
+
+  const HomeScreen({super.key, required this.user});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-class _HomeScreenState extends State<HomeScreen>{
+
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static final List<Widget> _screens = <Widget>[
-    HomeView(),
-    Center(child: Text('Quiz Page Placeholder', style: TextStyle(fontSize: 20))),
-    FunFactScreen(),
-    QuoteGalleryScreen(),
-    FAQScreen(),
-    AboutScreen(),
-  ];
+  late List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+
+
+    _screens = [
+      HomeView(user: widget.user),
+      QuizListScreen(user: widget.user),
+      const FunFactScreen(),
+      const QuoteGalleryScreen(),
+      FAQScreen(),
+      ProfileScreen(user: widget.user),
+    ];
+  }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen>{
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: const Color(0xFF7F00FF),
@@ -65,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen>{
             label: 'FAQ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info_outline),
-            label: 'About',
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
           ),
         ],
       ),
