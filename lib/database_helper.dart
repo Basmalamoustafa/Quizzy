@@ -427,4 +427,25 @@ class DatabaseHelper {
 
     return maps.map((map) => Question.fromMap(map)).toList();
   }
+  Future<int> changePassword(String email, String newPassword) async {
+    final db = await instance.database;
+
+    return await db.update(
+      'users',
+      {'password': newPassword},
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+  }
+  Future<int> deleteUser(String email) async {
+    final db = await instance.database;
+
+    return await db.delete(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+  }
+
+
 }
