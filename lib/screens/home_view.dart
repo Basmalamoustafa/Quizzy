@@ -4,6 +4,7 @@ import 'package:flutter_application_1/screens/fun_fact_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_application_1/screens/about_screen.dart';
 import 'package:flutter_application_1/screens/faq_screen.dart';
+import 'package:flutter_application_1/screens/home.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -64,7 +65,7 @@ class HomeView extends StatelessWidget {
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () {},
+              onTap: () => (context.findAncestorStateOfType<HomeScreenState>()?.switchTab(1)),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),

@@ -5,21 +5,27 @@ import 'package:flutter_application_1/screens/gallery_screen.dart';
 import 'home_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'faq_screen.dart';
+import 'quizlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+
+  void switchTab(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   static final List<Widget> _screens = <Widget>[
     HomeView(),
-    Center(
-        child: Text('Quiz Page Placeholder', style: TextStyle(fontSize: 20))),
+    QuizListScreen(),
     FunFactScreen(),
     QuoteGalleryScreen(),
     FAQScreen(),
