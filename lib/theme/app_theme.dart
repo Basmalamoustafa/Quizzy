@@ -1,40 +1,79 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // 🌞 LIGHT THEME
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
+    useMaterial3: true,
+
     colorScheme: const ColorScheme.light(
       primary: Color(0xFF8B5CF6),
       secondary: Color(0xFFEC4899),
-      background: Color(0xFFF9F5FF),
-      surface: Colors.white,
-      onSurface: Colors.black87,
-      onBackground: Colors.black87,
+      background: Color(0xFFF6F2FF),
+      surface: Color(0xFFFFFFFF),
+      onSurface: Color(0xFF1A1A1A),
+      onBackground: Color(0xFF1A1A1A),
     ),
-    scaffoldBackgroundColor: const Color(0xFFF9F5FF),
-    cardColor: Colors.white,
-    useMaterial3: true,
+
+    scaffoldBackgroundColor: const Color(0xFFF6F2FF),
+
+    shadowColor: const Color(0xFF8B5CF6).withOpacity(0.18),
+
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+      },
+    ),
+
+    textTheme: const TextTheme(
+      headlineMedium: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 26,
+        letterSpacing: -0.5,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 16,
+        height: 1.4,
+      ),
+    ),
   );
 
-  // 🌙 DARK THEME (fixed + readable)
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(
-      primary: Color(0xFF6D28D9),
-      secondary: Color(0xFFBE185D),
+    useMaterial3: true,
 
-      // 👇NEW COLORS (important)
-      background: Color(0xFF0F0A1C),
-      surface: Color(0xFF262037),
-      onSurface: Color(0xFFE8E8E8),
-      onBackground: Color(0xFFE0E0E0),
+    colorScheme: ColorScheme.dark(
+      primary: const Color(0xFF9F7FFF),
+      secondary: const Color(0xFFFF4FA8),
+      background: const Color(0xFF0A0714),
+      surface: const Color(0xFF171222).withOpacity(0.6),
+      onSurface: Colors.white.withOpacity(0.92),
+      onBackground: Colors.white.withOpacity(0.90),
     ),
 
-    scaffoldBackgroundColor: const Color(0xFF0F0A1C),
+    scaffoldBackgroundColor: const Color(0xFF0A0714),
 
-    cardColor: const Color(0xFF2F2842),
+    shadowColor: const Color(0xFFEC4899).withOpacity(0.45),
 
-    useMaterial3: true,
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+      },
+    ),
+
+    textTheme: TextTheme(
+      headlineMedium: const TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 26,
+        letterSpacing: -0.5,
+      ).copyWith(color: Colors.white),
+
+      bodyMedium: const TextStyle(
+        fontSize: 16,
+        height: 1.4,
+        color: Colors.white70,
+      ),
+    ),
   );
 }

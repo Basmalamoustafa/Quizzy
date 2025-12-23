@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBody: false,
       backgroundColor: const Color(0xFFFDF7FD),
       body: _screens[_selectedIndex],
 

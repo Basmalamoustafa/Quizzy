@@ -53,6 +53,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -84,7 +87,20 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Schyler
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/img/Logo.png"
+
+flutter_native_splash:
+  android: true
+  ios: true
+  background_image: assets/img/splash_screen_bg.png
+  image: assets/img/splash_screen_logo.png
+  android_gravity: center
+  ios_content_mode: center
+
+ #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf

@@ -27,8 +27,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quizzy App',
       debugShowCheckedModeBanner: false,
-
-      // ⭐ DARK MODE WORKS EVERYWHERE NOW
       themeMode: themeProvider.themeMode,
       theme: ThemeProvider.lightTheme,
       darkTheme: ThemeProvider.darkTheme,

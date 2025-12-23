@@ -135,7 +135,7 @@ class AboutScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 12),
 
-              // 🌈 HEADER
+
               Column(
                 children: [
                   Container(
@@ -178,7 +178,6 @@ class AboutScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // 🌟 CARDS
               _infoCard(
                 context: context,
                 iconGradient: pinkBlue,
@@ -208,7 +207,6 @@ class AboutScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // 🌐 SOCIAL SECTION (theme aware)
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(18),

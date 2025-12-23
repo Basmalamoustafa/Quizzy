@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../theme/app_theme.dart'; // ⭐ ADD THIS
+import '../theme/app_theme.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.light;
@@ -32,7 +32,6 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // ✔ Connect AppTheme class
   static ThemeData get lightTheme => AppTheme.lightTheme;
   static ThemeData get darkTheme => AppTheme.darkTheme;
 }

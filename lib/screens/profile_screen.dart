@@ -92,7 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             const SizedBox(height: 24),
 
-            /// ⭐ PROFILE PICTURE
             CircleAvatar(
               radius: 65,
               backgroundColor: Colors.purple.shade100,
@@ -138,7 +137,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 40),
 
-            /// ⭐ LOGOUT BUTTON
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: GestureDetector(
