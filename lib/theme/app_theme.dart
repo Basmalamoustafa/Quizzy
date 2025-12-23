@@ -55,6 +55,11 @@ class AppTheme {
 
     shadowColor: const Color(0xFFEC4899).withOpacity(0.45),
 
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFF0F0B1E),
+      elevation: 0,
+    ),
+
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),

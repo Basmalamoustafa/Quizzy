@@ -45,16 +45,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBody: false,
-      backgroundColor: const Color(0xFFFDF7FD),
-      body: _screens[_selectedIndex],
+    extendBody: false,
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    body: _screens[_selectedIndex],
 
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: const Color(0xFF7F00FF),
-        unselectedItemColor: Colors.grey,
+
+    bottomNavigationBar: BottomNavigationBar(
+      backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
+      selectedItemColor: const Color(0xFF7F00FF),
+      unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
