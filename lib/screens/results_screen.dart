@@ -18,12 +18,29 @@ class ResultScreen extends StatefulWidget {
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
-class _ResultScreenState extends State<ResultScreen> {
+class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
   int _userRating = 0;
   final TextEditingController _feedbackController = TextEditingController();
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _scaleAnimation = CurvedAnimation(parent: _controller, curve: Curves.elasticOut);
+    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _controller.forward();
+  }
 
   @override
   void dispose() {
+    _controller.dispose();
     _feedbackController.dispose();
     super.dispose();
   }
@@ -48,151 +65,139 @@ class _ResultScreenState extends State<ResultScreen> {
         child: Column(
           children: [
             const SizedBox(height: 80),
-
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 24),
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(40),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.colorScheme.onSurface.withOpacity(
-                        theme.brightness == Brightness.dark ? 0.25 : 0.15,
-                      ),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: FadeTransition(
+                  opacity: _controller,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(40),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.onSurface.withOpacity(
+                            theme.brightness == Brightness.dark ? 0.25 : 0.15,
+                          ),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-
-                // ⭐ THIS SCROLL FIX PREVENTS ALL OVERFLOWS
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        resultData['emoji']!,
-                        style: const TextStyle(fontSize: 80),
-                      ),
-                      const SizedBox(height: 24),
-
-                      Text(
-                        "You are...",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-
-                      Text(
-                        resultData['title']!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      Text(
-                        resultData['description']!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          height: 1.5,
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      Text(
-                        "Rate this quiz:",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color:
-                          theme.colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-
-                      _buildRatingStars(theme),
-                      const SizedBox(height: 20),
-
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color:
-                          theme.colorScheme.surface.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: theme.colorScheme.onSurface
-                                .withOpacity(0.15),
-                          ),
-                        ),
-                        child: TextField(
-                          controller: _feedbackController,
-                          maxLines: 3,
-                          style: TextStyle(
-                              color: theme.colorScheme.onSurface),
-                          decoration: InputDecoration(
-                            hintText:
-                            "Tell us what you liked or disliked...",
-                            hintStyle: TextStyle(
-                              color: theme.colorScheme.onSurface
-                                  .withOpacity(0.5),
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(10),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(user: widget.user),
-                              ),
-                                  (route) => false,
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: const Color(0xFFEC4899),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ScaleTransition(
+                            scale: _scaleAnimation,
+                            child: Text(
+                              resultData['emoji']!,
+                              style: const TextStyle(fontSize: 80),
                             ),
                           ),
-                          child: const Text(
-                            "Back to Home",
+                          const SizedBox(height: 24),
+                          Text(
+                            "You are...",
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ),
+                          const SizedBox(height: 8),
+                          Text(
+                            resultData['title']!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          Text(
+                            resultData['description']!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              height: 1.5,
+                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Text(
+                            "Rate this quiz:",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          _buildRatingStars(theme),
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surface.withOpacity(0.9),
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                color: theme.colorScheme.onSurface.withOpacity(0.15),
+                              ),
+                            ),
+                            child: TextField(
+                              controller: _feedbackController,
+                              maxLines: 3,
+                              style: TextStyle(color: theme.colorScheme.onSurface),
+                              decoration: InputDecoration(
+                                hintText: "Tell us what you liked or disliked...",
+                                hintStyle: TextStyle(
+                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.all(10),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(user: widget.user),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                backgroundColor: const Color(0xFFEC4899),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: const Text(
+                                "Back to Home",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-
             const SizedBox(height: 40),
           ],
         ),
@@ -204,28 +209,38 @@ class _ResultScreenState extends State<ResultScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
-        return IconButton(
-          onPressed: () {
-            setState(() {
-              _userRating = index + 1;
-            });
-
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("You rated it ${index + 1} stars!"),
-                duration: const Duration(milliseconds: 500),
-                behavior: SnackBarBehavior.floating,
-              ),
+        return TweenAnimationBuilder(
+          duration: const Duration(milliseconds: 300),
+          tween: Tween<double>(begin: 1.0, end: index < _userRating ? 1.2 : 1.0),
+          builder: (context, scale, child) {
+            return Transform.scale(
+              scale: scale,
+              child: child,
             );
           },
-          icon: Icon(
-            index < _userRating ? Icons.star : Icons.star_border,
-            color: Colors.amber,
-            size: 32,
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                _userRating = index + 1;
+              });
+
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("You rated it ${index + 1} stars!"),
+                  duration: const Duration(milliseconds: 500),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+            icon: Icon(
+              index < _userRating ? Icons.star : Icons.star_border,
+              color: Colors.amber,
+              size: 32,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
           ),
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
         );
       }),
     );

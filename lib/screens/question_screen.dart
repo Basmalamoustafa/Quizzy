@@ -28,7 +28,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<QuizProvider>(context, listen: false)
           .loadQuestions(widget.quizId);
@@ -50,17 +49,17 @@ class _QuestionScreenState extends State<QuestionScreen> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => ResultScreen(
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 800),
+            pageBuilder: (_, __, ___) => ResultScreen(
               quizId: widget.quizId,
               answers: _answers,
               user: widget.user,
             ),
+            transitionsBuilder: (_, animation, __, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
           ),
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Quiz Completed!")),
         );
       }
     });
@@ -122,35 +121,53 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       ],
                     ),
                   ),
-
                   Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.all(16),
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            question.questionText,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.onSurface,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(1, 0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+                      child: Container(
+                        key: ValueKey<int>(_currentIndex),
+                        width: double.infinity,
+                        margin: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surface,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              question.questionText,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 40),
-
-                          _buildOption(question, 'a', question.optionA),
-                          _buildOption(question, 'b', question.optionB),
-                          _buildOption(question, 'c', question.optionC),
-                          _buildOption(question, 'd', question.optionD),
-                        ],
+                            const SizedBox(height: 40),
+                            _buildOption(question, 'a', question.optionA, 0),
+                            _buildOption(question, 'b', question.optionB, 1),
+                            _buildOption(question, 'c', question.optionC, 2),
+                            _buildOption(question, 'd', question.optionD, 3),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -163,51 +180,68 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
-  Widget _buildOption(Question q, String key, String text) {
+  Widget _buildOption(Question q, String key, String text, int index) {
     final theme = Theme.of(context);
+    bool isSelected = _answers[_currentIndex] == key;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: ElevatedButton(
-        onPressed: () => _submitAnswer(key),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: theme.colorScheme.surface,
-          foregroundColor: theme.colorScheme.onSurface,
-          elevation: 2,
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: BorderSide(
-              color: theme.colorScheme.onSurface.withOpacity(0.08),
-              width: 1,
+    return TweenAnimationBuilder(
+      duration: const Duration(milliseconds: 400),
+      tween: Tween<double>(begin: 0, end: 1),
+      builder: (context, double value, child) {
+        return Transform.translate(
+          offset: Offset(0, 20 * (1 - value)),
+          child: Opacity(opacity: value, child: child),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          transform: isSelected ? Matrix4.identity().scaled(0.98) : Matrix4.identity(),
+          child: ElevatedButton(
+            onPressed: () => _submitAnswer(key),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isSelected ? const Color(0xFFEC4899) : theme.colorScheme.surface,
+              foregroundColor: isSelected ? Colors.white : theme.colorScheme.onSurface,
+              elevation: isSelected ? 0 : 2,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(
+                  color: isSelected ? Colors.transparent : theme.colorScheme.onSurface.withOpacity(0.08),
+                  width: 1,
+                ),
+              ),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 15,
+                  backgroundColor: isSelected
+                      ? Colors.white.withOpacity(0.3)
+                      : theme.colorScheme.onSurface.withOpacity(0.12),
+                  child: Text(
+                    key.toUpperCase(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 15,
-              backgroundColor: theme.colorScheme.onSurface.withOpacity(0.12),
-              child: Text(
-                key.toUpperCase(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

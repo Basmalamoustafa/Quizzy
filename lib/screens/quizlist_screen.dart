@@ -33,7 +33,6 @@ class _QuizListScreenState extends State<QuizListScreen> {
         padding: const EdgeInsets.only(top: 60, left: 24, right: 24),
         child: Column(
           children: [
-
             Row(
               children: [
                 IconButton(
@@ -55,10 +54,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
-            // QUIZ LIST
             Expanded(
               child: Consumer<QuizProvider>(
                 builder: (context, provider, child) {
@@ -75,7 +71,20 @@ class _QuizListScreenState extends State<QuizListScreen> {
                     padding: const EdgeInsets.only(bottom: 20),
                     itemBuilder: (context, index) {
                       final quiz = provider.quizzes[index];
-                      return _buildQuizCard(quiz);
+                      return TweenAnimationBuilder(
+                        duration: const Duration(milliseconds: 500),
+                        tween: Tween<double>(begin: 0, end: 1),
+                        builder: (context, double value, child) {
+                          return Transform.translate(
+                            offset: Offset(0, 50 * (1 - value)),
+                            child: Opacity(
+                              opacity: value,
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: _buildQuizCard(quiz),
+                      );
                     },
                   );
                 },
@@ -126,16 +135,18 @@ class _QuizListScreenState extends State<QuizListScreen> {
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                child: SizedBox(
-                  height: 150,
-                  width: double.infinity,
-                  child: Image.asset(
-                    quiz.imagePath,
-                    fit: BoxFit.cover,
+                child: Hero(
+                  tag: 'quiz_img_${quiz.id}',
+                  child: SizedBox(
+                    height: 150,
+                    width: double.infinity,
+                    child: Image.asset(
+                      quiz.imagePath,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(

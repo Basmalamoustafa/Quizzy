@@ -26,66 +26,91 @@ class HomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 36),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Hi, ${user.name.split(' ').first}",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 800),
+                builder: (context, double value, child) {
+                  return Opacity(
+                    opacity: value,
+                    child: Transform.translate(
+                      offset: Offset(0, 20 * (1 - value)),
+                      child: child,
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ProfileScreen(user: user),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Hi, ${user.name.split(' ').first}",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    child: CircleAvatar(
-                      radius: 26,
-                      backgroundColor:
-                      theme.colorScheme.primary.withOpacity(0.2),
-                      child: Icon(
-                        Icons.person_outline,
-                        color: theme.colorScheme.primary,
-                        size: 28,
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProfileScreen(user: user),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
+                      child: Hero(
+                        tag: 'profile_pic',
+                        child: CircleAvatar(
+                          radius: 26,
+                          backgroundColor:
+                          theme.colorScheme.primary.withOpacity(0.2),
+                          child: Icon(
+                            Icons.person_outline,
+                            color: theme.colorScheme.primary,
+                            size: 28,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                child: const Icon(
-                  Icons.auto_awesome_outlined,
-                  color: Colors.white,
-                  size: 45,
+              ),
+              const SizedBox(height: 20),
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 1000),
+                curve: Curves.elasticOut,
+                builder: (context, double value, child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: child,
+                  );
+                },
+                child: Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26.withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: const Hero(
+                    tag: 'app_logo',
+                    child: Icon(
+                      Icons.auto_awesome_outlined,
+                      color: Colors.white,
+                      size: 45,
+                    ),
+                  ),
                 ),
               ),
-
               const SizedBox(height: 20),
-
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
                   colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
@@ -99,9 +124,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 6),
-
               Text(
                 'Discover your personality today!',
                 style: TextStyle(
@@ -109,100 +132,112 @@ class HomeView extends StatelessWidget {
                   color: theme.textTheme.bodyMedium!.color!.withOpacity(0.6),
                 ),
               ),
-
               const SizedBox(height: 40),
-
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => QuizListScreen(user: user),
-                    ),
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 800),
+                builder: (context, double value, child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: Opacity(opacity: value, child: child),
                   );
                 },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 60, vertical: 20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.purple.withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => QuizListScreen(user: user),
                       ),
-                    ],
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.auto_awesome, color: Colors.white),
-                      SizedBox(width: 10),
-                      Text(
-                        'Start Quiz',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                    );
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 60, vertical: 20),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.purple.withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.auto_awesome, color: Colors.white),
+                        SizedBox(width: 10),
+                        Text(
+                          'Start Quiz',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-
               const SizedBox(height: 40),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildCard(
-                    context,
-                    icon: FontAwesomeIcons.bookOpen,
-                    label: 'Fun Facts',
-                    gradientColors: [Colors.blueAccent, Colors.cyan],
-                    onTap: () => Navigator.push(
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 800),
+                builder: (context, double value, child) {
+                  return Transform.translate(
+                    offset: Offset(0, 50 * (1 - value)),
+                    child: Opacity(opacity: value, child: child),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildCard(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const FunFactScreen(),
+                      icon: FontAwesomeIcons.bookOpen,
+                      label: 'Fun Facts',
+                      gradientColors: [Colors.blueAccent, Colors.cyan],
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const FunFactScreen(),
+                        ),
                       ),
                     ),
-                  ),
-                  buildCard(
-                    context,
-                    icon: Icons.help_outline,
-                    label: 'FAQ',
-                    gradientColors: [Colors.green, Colors.teal],
-                    onTap: () => Navigator.push(
+                    buildCard(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => FAQScreen(),
+                      icon: Icons.help_outline,
+                      label: 'FAQ',
+                      gradientColors: [Colors.green, Colors.teal],
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FAQScreen(),
+                        ),
                       ),
                     ),
-                  ),
-                  buildCard(
-                    context,
-                    icon: Icons.info_outline,
-                    label: 'About',
-                    gradientColors: [
-                      Colors.orangeAccent,
-                      Colors.pinkAccent
-                    ],
-                    onTap: () => Navigator.push(
+                    buildCard(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const AboutScreen(),
+                      icon: Icons.info_outline,
+                      label: 'About',
+                      gradientColors: [Colors.orangeAccent, Colors.pinkAccent],
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AboutScreen(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-
               const SizedBox(height: 20),
             ],
           ),
