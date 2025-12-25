@@ -3,13 +3,15 @@ import '../models/quiz_model.dart';
 import '../database_helper.dart';
 import '../models/question_model.dart';
 
+// Manages quiz data and loading state
 class QuizProvider with ChangeNotifier {
   List<Quiz> _quizzes = [];
-  bool _isLoading = false;
+  bool _isLoading = false; 
 
   List<Quiz> get quizzes => _quizzes;
   bool get isLoading => _isLoading;
 
+  // Loads all quizzes from the database
   Future<void> loadQuizzes() async {
     _isLoading = true;
     notifyListeners();
@@ -20,9 +22,11 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Questions for the current quiz we're viewing
   List<Question> _currentQuestions = [];
   List<Question> get currentQuestions => _currentQuestions;
 
+  // Gets questions for a specific quiz
   Future<void> loadQuestions(int quizId) async {
     _isLoading = true;
 
