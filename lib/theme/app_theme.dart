@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+// Define the app's light and dark themes
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     useMaterial3: true,
 
+    // Purple and pink color scheme
     colorScheme: const ColorScheme.light(
       primary: Color(0xFF8B5CF6),
       secondary: Color(0xFFEC4899),
@@ -18,6 +20,7 @@ class AppTheme {
 
     shadowColor: const Color(0xFF8B5CF6).withOpacity(0.18),
 
+    // Smooth fade transitions between pages
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
@@ -42,6 +45,7 @@ class AppTheme {
     brightness: Brightness.dark,
     useMaterial3: true,
 
+    // Dark theme with brighter purple/pink accents
     colorScheme: ColorScheme.dark(
       primary: const Color(0xFF9F7FFF),
       secondary: const Color(0xFFFF4FA8),
@@ -60,6 +64,7 @@ class AppTheme {
       elevation: 0,
     ),
 
+    // Same smooth transitions for dark mode
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),

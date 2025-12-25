@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/quote_model.dart';
 
+// Fetch quotes from the API (default = 5)
 Future<List<Quote>> getQuotes({int numberOfQuotes = 5}) async {
   List<Future<List<Quote>>> requests = [];
 
+  // Make multiple requests in parallel
   for (int i = 0; i < numberOfQuotes; i++) {
     requests.add(_fetchFromApi());
   }
@@ -12,6 +14,7 @@ Future<List<Quote>> getQuotes({int numberOfQuotes = 5}) async {
   return results.expand((element) => element).toList();
 }
 
+// Call the API to get quotes
 Future<List<Quote>> _fetchFromApi() async {
   const url = 'https://api.api-ninjas.com/v1/quotes';
   const apiKey = 'DOp1U6TOWo0RYmjqczs/nw==qAug3rxykcbiZZ45'; 
@@ -24,6 +27,7 @@ Future<List<Quote>> _fetchFromApi() async {
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
 
+    // Convert JSON to Quote objects
     return (data as List)
         .map((item) => Quote.fromJson(item))
         .toList();
