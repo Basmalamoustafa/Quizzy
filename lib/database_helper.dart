@@ -4,18 +4,21 @@ import 'models/user_model.dart';
 import 'models/quiz_model.dart';
 import 'models/question_model.dart';
 
+// Handles all database operations (users, quizzes, questions)
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
-  static Database? _database;
+  static Database? _database; // Single database instance
 
   DatabaseHelper._init();
 
+  // Gets db instance, creates it if needed
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB('quizzy_v3.db');
     return _database!;
   }
 
+  // Initializes the db file
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
@@ -29,10 +32,12 @@ class DatabaseHelper {
     );
   }
 
+  // Enables foreign key constraints
   Future _onConfigure(Database db) async {
     await db.execute('PRAGMA foreign_keys = ON');
   }
 
+  // Creates all tables and seeds initial data
   Future _createDB(Database db, int version) async {
     const userTable = '''
     CREATE TABLE users (
@@ -76,6 +81,7 @@ class DatabaseHelper {
     await _seedData(db);
   }
 
+  // Handles db version upgrades
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
       await db.execute("DROP TABLE IF EXISTS questions");
@@ -85,11 +91,13 @@ class DatabaseHelper {
     }
   }
 
+  // Creates a new user account
   Future<int> registerUser(User user) async {
     final db = await instance.database;
     return await db.insert('users', user.toMap());
   }
 
+  // Validates login credentials
   Future<User?> loginUser(String email, String password) async {
     final db = await instance.database;
     final maps = await db.query(
@@ -105,6 +113,7 @@ class DatabaseHelper {
     }
   }
 
+  // Updates user's profile picture path
   Future<int> updateProfileImage(String email, String newPath) async {
     final db = await instance.database;
 
@@ -116,6 +125,7 @@ class DatabaseHelper {
     );
   }
 
+  // Populates db with initial quiz and question data
   Future<void> _seedData(Database db) async {
     final quizzes = [
       {
@@ -145,7 +155,8 @@ class DatabaseHelper {
     ];
 
     for (var quiz in quizzes) {
-      await db.insert('quizzes', quiz, conflictAlgorithm: ConflictAlgorithm.replace);
+      await db.insert('quizzes', quiz,
+          conflictAlgorithm: ConflictAlgorithm.replace);
     }
 
     final q1 = [
@@ -410,12 +421,14 @@ class DatabaseHelper {
     }
   }
 
+  // Gets all available quizzes
   Future<List<Quiz>> getAllQuizzes() async {
     final db = await instance.database;
     final result = await db.query('quizzes');
     return result.map((map) => Quiz.fromMap(map)).toList();
   }
 
+  // Gets all questions for a specific quiz
   Future<List<Question>> getQuestions(int quizId) async {
     final db = await instance.database;
     final maps = await db.query(
@@ -427,6 +440,8 @@ class DatabaseHelper {
 
     return maps.map((map) => Question.fromMap(map)).toList();
   }
+
+  // Updates user password
   Future<int> changePassword(String email, String newPassword) async {
     final db = await instance.database;
 
@@ -437,6 +452,8 @@ class DatabaseHelper {
       whereArgs: [email],
     );
   }
+
+  // Deletes user account
   Future<int> deleteUser(String email) async {
     final db = await instance.database;
 
@@ -446,6 +463,4 @@ class DatabaseHelper {
       whereArgs: [email],
     );
   }
-
-
 }

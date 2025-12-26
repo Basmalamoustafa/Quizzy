@@ -4,6 +4,7 @@ import 'providers/quiz_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/login_screen.dart';
 
+// App entry point
 void main() {
   runApp(
     MultiProvider(
@@ -16,6 +17,7 @@ void main() {
   );
 }
 
+// Main app widget with theme configuration
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
