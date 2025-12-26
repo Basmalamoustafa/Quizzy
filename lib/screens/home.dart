@@ -8,7 +8,7 @@ import 'fun_fact_screen.dart';
 import 'gallery_screen.dart';
 import 'faq_screen.dart';
 
-
+// Main screen with bottom navigation
 class HomeScreen extends StatefulWidget {
   final User user;
 
@@ -19,14 +19,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // Selected tab
 
   late List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
-
 
     _screens = [
       HomeView(user: widget.user),
@@ -38,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
+  // Handles bottom nav bar taps
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
   }
@@ -45,18 +45,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    extendBody: false,
-    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-    body: _screens[_selectedIndex],
-
-
-    bottomNavigationBar: BottomNavigationBar(
-      backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-      selectedItemColor: const Color(0xFF7F00FF),
-      unselectedItemColor: Colors.grey,
+      extendBody: false,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: const Color(0xFF7F00FF),
+        unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),

@@ -3,6 +3,7 @@ import '../models/quote_model.dart';
 import '../services/api_service.dart';
 import '../widgets/common_widgets.dart';
 
+// Gallery screen showing quotes
 class QuoteGalleryScreen extends StatefulWidget {
   const QuoteGalleryScreen({Key? key}) : super(key: key);
 
@@ -13,7 +14,7 @@ class QuoteGalleryScreen extends StatefulWidget {
 class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
   late Future<List<Quote>> quotesFuture;
   List<Quote> quotes = [];
-  int _currentIndex = 0;
+  int _currentIndex = 0; // Current quote
 
   @override
   void initState() {
@@ -27,8 +28,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor, // ⭐ FIXED
-
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -50,9 +50,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
                       title: "Quotes Gallery",
                       subtitle: "Swipe through inspiring quotes",
                     ),
-
                     const SizedBox(height: 24),
-
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 400),
                       child: KeyedSubtree(
@@ -60,9 +58,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
                         child: _buildQuoteContent(currentQuote, isDark),
                       ),
                     ),
-
                     const SizedBox(height: 32),
-
                     GradientActionButton(
                       text: "Next Quote",
                       icon: Icons.arrow_forward,
@@ -72,9 +68,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
                         });
                       },
                     ),
-
                     const SizedBox(height: 24),
-
                     PaginationDots(
                       totalCount: quotes.length,
                       currentIndex: _currentIndex,
@@ -92,6 +86,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
     );
   }
 
+  // Builds the card showing quote text and author
   Widget _buildQuoteContent(Quote quote, bool isDark) {
     return ContentCard(
       padding: const EdgeInsets.all(32),
@@ -100,11 +95,10 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
           Icon(
             Icons.format_quote,
             size: 50,
-            color: isDark ? Colors.purpleAccent.shade100 : const Color(0xFF8B5CF6),
+            color:
+                isDark ? Colors.purpleAccent.shade100 : const Color(0xFF8B5CF6),
           ),
-
           const SizedBox(height: 16),
-
           Text(
             quote.text,
             textAlign: TextAlign.center,
@@ -114,9 +108,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
               color: isDark ? Colors.white : const Color(0xFF374151),
             ),
           ),
-
           const SizedBox(height: 16),
-
           Text(
             "- ${quote.author}",
             style: TextStyle(
@@ -125,9 +117,7 @@ class _QuoteGalleryScreenState extends State<QuoteGalleryScreen> {
               fontStyle: FontStyle.italic,
             ),
           ),
-
           const SizedBox(height: 20),
-
           Text(
             "${_currentIndex + 1} of ${quotes.length}",
             style: TextStyle(

@@ -5,6 +5,7 @@ import '../models/quiz_model.dart';
 import '../models/user_model.dart';
 import 'question_screen.dart';
 
+// Screen showing list of available quizzes
 class QuizListScreen extends StatefulWidget {
   final User user;
 
@@ -96,6 +97,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
     );
   }
 
+  // Builds a card for each quiz
   Widget _buildQuizCard(Quiz quiz) {
     final theme = Theme.of(context);
 

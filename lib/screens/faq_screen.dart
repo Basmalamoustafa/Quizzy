@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../models/faq.dart';
 import '../widgets/faq_item.dart';
 
+// FAQ page with common questions
 class FAQScreen extends StatelessWidget {
   FAQScreen({Key? key}) : super(key: key);
 
+  // List of frequently asked questions
   final List<FAQ> faqs = [
     FAQ(
       question: "How accurate are these quizzes?",
@@ -43,6 +45,7 @@ class FAQScreen extends StatelessWidget {
     ),
   ];
 
+  // Title with gradient text effect
   Widget _gradientTitle(String title) {
     return ShaderMask(
       shaderCallback: (bounds) =>

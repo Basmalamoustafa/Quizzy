@@ -3,6 +3,7 @@ import '../database_helper.dart';
 import 'home.dart';
 import 'signup_screen.dart';
 
+// Login screen with email and password
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -14,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  late AnimationController _controller;
+  late AnimationController _controller; // For entrance animations
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
@@ -39,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
+  // Validates and attempts login
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 

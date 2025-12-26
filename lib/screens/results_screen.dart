@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import 'home.dart';
 
+// Screen showing quiz results and personality type
 class ResultScreen extends StatefulWidget {
   final int quizId;
   final Map<int, String> answers;
@@ -19,9 +20,9 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
-  int _userRating = 0;
+  int _userRating = 0; // Star rating for the quiz
   final TextEditingController _feedbackController = TextEditingController();
-  late AnimationController _controller;
+  late AnimationController _controller; // For result reveal animation
   late Animation<double> _scaleAnimation;
   late Animation<Offset> _slideAnimation;
 
@@ -205,6 +206,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     );
   }
 
+  // Builds the 5-star rating widget
   Widget _buildRatingStars(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -246,6 +248,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     );
   }
 
+  // Counts which answer (a/b/c/d) was selected most
   String _calculateDominantLetter() {
     int a = 0, b = 0, c = 0, d = 0;
 
@@ -264,6 +267,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     return 'd';
   }
 
+  // Returns personality result based on quiz and dominant answer
   Map<String, String> _getPersonalityResult(int quizId, String letter) {
     if (quizId == 1) {
       switch (letter) {

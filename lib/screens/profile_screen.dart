@@ -7,6 +7,7 @@ import '../models/user_model.dart';
 import 'login_screen.dart';
 import 'settings_screen.dart';
 
+// User profile screen showing name, email, and profile picture
 class ProfileScreen extends StatefulWidget {
   final User user;
   const ProfileScreen({Key? key, required this.user}) : super(key: key);
@@ -17,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late User _user;
-  File? _newImage;
+  File? _newImage; // Newly picked image
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -26,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _user = widget.user.copyWith();
   }
 
+  // Opens gallery to pick profile picture
   Future<void> _pickImage() async {
     try {
       final XFile? img = await _picker.pickImage(source: ImageSource.gallery);
@@ -47,6 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  // Logs out and returns to login screen
   void _logout() {
     Navigator.pushAndRemoveUntil(
       context,

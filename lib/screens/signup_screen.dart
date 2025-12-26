@@ -5,6 +5,7 @@ import '../database_helper.dart';
 import '../models/user_model.dart';
 import 'login_screen.dart';
 
+// Sign up screen for creating new account
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -18,9 +19,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  File? _profileImage;
+  File? _profileImage; // Selected profile picture
   final ImagePicker _picker = ImagePicker();
 
+  // Picks image from gallery or camera
   Future<void> _pickImage(ImageSource source) async {
     try {
       final img = await _picker.pickImage(source: source);
@@ -30,6 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (_) {}
   }
 
+  // Shows bottom sheet to choose image source
   void _showImagePicker() {
     showModalBottomSheet(
       context: context,
@@ -58,6 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  // Validates form and creates new user account
   Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -125,10 +129,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.purple.shade100,
-                      backgroundImage:
-                      _profileImage != null ? FileImage(_profileImage!) : null,
+                      backgroundImage: _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : null,
                       child: _profileImage == null
-                          ? const Icon(Icons.person, size: 60, color: Colors.white)
+                          ? const Icon(Icons.person,
+                              size: 60, color: Colors.white)
                           : null,
                     ),
                     Positioned(
@@ -147,12 +153,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 10),
               const Text("Tap to add profile picture"),
-
               const SizedBox(height: 30),
-
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -161,11 +164,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (v) =>
-                v == null || v.isEmpty ? "Enter your name" : null,
+                    v == null || v.isEmpty ? "Enter your name" : null,
               ),
-
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -179,9 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   return null;
                 },
               ),
-
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
@@ -191,12 +190,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (v) =>
-                v != null && v.length >= 6 ? null : "Min 6 characters",
+                    v != null && v.length >= 6 ? null : "Min 6 characters",
               ),
-
               const SizedBox(height: 28),
-
-              // SIGN UP (Gradient)
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -220,9 +216,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
-
               TextButton(
                 onPressed: () {
                   Navigator.push(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/fun_fact_model.dart';
 import '../widgets/common_widgets.dart';
 
+// Screen showing fun psychology facts
 class FunFactScreen extends StatefulWidget {
   const FunFactScreen({Key? key}) : super(key: key);
 
@@ -10,9 +11,9 @@ class FunFactScreen extends StatefulWidget {
 }
 
 class _FunFactScreenState extends State<FunFactScreen> {
-  String _selectedMBTI = 'All';
-  int _currentFactIndex = 0;
-  bool _showFilter = false;
+  String _selectedMBTI = 'All'; // Current filter selection
+  int _currentFactIndex = 0; // Which fact we're showing
+  bool _showFilter = false; // Filter dropdown visibility
   List<FunFact> _filteredFacts = [];
 
   @override
@@ -21,6 +22,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
     _updateFilteredFacts();
   }
 
+  // Updates the list based on selected filter
   void _updateFilteredFacts() {
     setState(() {
       if (_selectedMBTI == 'All') {
@@ -28,13 +30,13 @@ class _FunFactScreenState extends State<FunFactScreen> {
       } else {
         _filteredFacts = allFunFacts
             .where((fact) =>
-        fact.category == _selectedMBTI ||
-            fact.category == 'All')
+                fact.category == _selectedMBTI || fact.category == 'All')
             .toList();
       }
     });
   }
 
+  // Handles when user picks a different filter
   void _handleFilterChange(String mbti) {
     setState(() {
       _selectedMBTI = mbti;
@@ -54,8 +56,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
         : allFunFacts[0];
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor, // ⭐ FIXED
-
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -66,21 +67,15 @@ class _FunFactScreenState extends State<FunFactScreen> {
                   title: "Fun Facts",
                   subtitle: "Learn interesting psychology insights",
                 ),
-
                 const SizedBox(height: 24.0),
-
                 _buildFilterButton(isDark),
                 _buildFilterDropdown(isDark),
-
                 const SizedBox(height: 24.0),
-
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   child: _buildFactContent(currentFact, isDark),
                 ),
-
                 const SizedBox(height: 32.0),
-
                 GradientActionButton(
                   text: "Next Fact",
                   icon: Icons.shuffle,
@@ -91,9 +86,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
                     });
                   },
                 ),
-
                 const SizedBox(height: 24.0),
-
                 PaginationDots(
                   totalCount: _filteredFacts.length,
                   currentIndex: _currentFactIndex,
@@ -111,6 +104,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
     );
   }
 
+  // Builds the card showing the current fact
   Widget _buildFactContent(FunFact fact, bool isDark) {
     return ContentCard(
       padding: const EdgeInsets.all(32),
@@ -160,6 +154,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
     );
   }
 
+  // Filter button that toggles dropdown
   Widget _buildFilterButton(bool isDark) {
     final bool isFiltered = _selectedMBTI != 'All';
 
@@ -168,12 +163,10 @@ class _FunFactScreenState extends State<FunFactScreen> {
       decoration: BoxDecoration(
         gradient: isFiltered
             ? const LinearGradient(
-          colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
-        )
+                colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+              )
             : null,
-        color: isFiltered
-            ? null
-            : (isDark ? Colors.white10 : Colors.white),
+        color: isFiltered ? null : (isDark ? Colors.white10 : Colors.white),
         borderRadius: BorderRadius.circular(16),
       ),
       child: GestureDetector(
@@ -212,6 +205,7 @@ class _FunFactScreenState extends State<FunFactScreen> {
     );
   }
 
+  // Dropdown showing MBTI filter options
   Widget _buildFilterDropdown(bool isDark) {
     return Visibility(
       visible: _showFilter,
@@ -231,10 +225,12 @@ class _FunFactScreenState extends State<FunFactScreen> {
             return ElevatedButton(
               onPressed: () => _handleFilterChange(mbti),
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                isSelected ? const Color(0xFF8B5CF6) : (isDark ? Colors.black26 : Colors.grey[100]),
-                foregroundColor:
-                isSelected ? Colors.white : (isDark ? Colors.white : Colors.grey[800]),
+                backgroundColor: isSelected
+                    ? const Color(0xFF8B5CF6)
+                    : (isDark ? Colors.black26 : Colors.grey[100]),
+                foregroundColor: isSelected
+                    ? Colors.white
+                    : (isDark ? Colors.white : Colors.grey[800]),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

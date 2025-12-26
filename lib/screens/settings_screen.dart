@@ -7,6 +7,7 @@ import 'login_screen.dart';
 import 'faq_screen.dart';
 import 'about_screen.dart';
 
+// Settings screen with theme toggle, password change, etc
 class SettingsScreen extends StatefulWidget {
   final User user;
   const SettingsScreen({Key? key, required this.user}) : super(key: key);
@@ -16,7 +17,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-
+  // Shows dialog to change password
   void _changePasswordDialog() {
     final controller = TextEditingController();
 
@@ -43,7 +44,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               if (newPass.length < 6) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Password must be at least 6 characters.")),
+                  const SnackBar(
+                      content: Text("Password must be at least 6 characters.")),
                 );
                 return;
               }
@@ -68,13 +70,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  // Shows confirmation dialog before deleting account
   void _confirmDeleteAccount() {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Delete Account"),
-        content:
-        const Text("Are you sure you want to delete your account? This action cannot be undone."),
+        content: const Text(
+            "Are you sure you want to delete your account? This action cannot be undone."),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -82,8 +85,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           TextButton(
             onPressed: () async {
-              final rows = await DatabaseHelper.instance
-                  .deleteUser(widget.user.email);
+              final rows =
+                  await DatabaseHelper.instance.deleteUser(widget.user.email);
 
               Navigator.pop(context);
 
@@ -91,11 +94,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (_) => false,
+                  (_) => false,
                 );
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Account deleted successfully.")),
+                  const SnackBar(
+                      content: Text("Account deleted successfully.")),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -127,21 +131,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: themeProvider.isDark,
             onChanged: (_) => themeProvider.toggleTheme(),
           ),
-
           ListTile(
             leading: const Icon(Icons.lock_outline),
             title: const Text("Change Password"),
             onTap: _changePasswordDialog,
           ),
-
           ListTile(
             leading: const Icon(Icons.delete_outline, color: Colors.red),
             title: const Text("Delete Account"),
             onTap: _confirmDeleteAccount,
           ),
-
           const Divider(),
-
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text("About Quizzy"),
@@ -150,7 +150,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               MaterialPageRoute(builder: (_) => const AboutScreen()),
             ),
           ),
-
           ListTile(
             leading: const Icon(Icons.help_outline),
             title: const Text("FAQ"),

@@ -5,6 +5,7 @@ import '../models/question_model.dart';
 import '../models/user_model.dart';
 import 'results_screen.dart';
 
+// Screen showing quiz questions one at a time
 class QuestionScreen extends StatefulWidget {
   final int quizId;
   final String quizTitle;
@@ -22,8 +23,8 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
-  int _currentIndex = 0;
-  final Map<int, String> _answers = {};
+  int _currentIndex = 0; // Current question number
+  final Map<int, String> _answers = {}; // Stores answers by question index
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     });
   }
 
+  // Saves answer and moves to next question or shows results
   void _submitAnswer(String answerKey) {
     setState(() {
       _answers[_currentIndex] = answerKey;
@@ -180,6 +182,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
     );
   }
 
+  // Builds an answer option button
   Widget _buildOption(Question q, String key, String text, int index) {
     final theme = Theme.of(context);
     bool isSelected = _answers[_currentIndex] == key;

@@ -8,6 +8,7 @@ import 'profile_screen.dart';
 import 'quizlist_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// Main home view with welcome message and quick actions
 class HomeView extends StatelessWidget {
   final User user;
 

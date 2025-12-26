@@ -2,9 +2,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// About page showing app info and details
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
 
+  // Creates a circular icon with gradient background
   Widget _gradientIconCircle({
     required List<Color> colors,
     required Widget child,
@@ -20,6 +22,7 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
+  // Card showing mission
   Widget _infoCard({
     required BuildContext context,
     required List<Color> iconGradient,
@@ -84,6 +87,7 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
+  // Social media icon button
   Widget _socialCircle({
     required Widget icon,
     required bool isDark,
@@ -134,8 +138,6 @@ class AboutScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 12),
-
-
               Column(
                 children: [
                   Container(
@@ -154,11 +156,11 @@ class AboutScreen extends StatelessWidget {
                       ],
                     ),
                     child: const Center(
-                      child: Icon(Icons.auto_awesome, color: Colors.white, size: 40),
+                      child: Icon(Icons.auto_awesome,
+                          color: Colors.white, size: 40),
                     ),
                   ),
                   const SizedBox(height: 12),
-
                   ShaderMask(
                     shaderCallback: (bounds) => const LinearGradient(
                       colors: [Color(0xFF6D28D9), Color(0xFFEC4899)],
@@ -175,38 +177,32 @@ class AboutScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
-
               _infoCard(
                 context: context,
                 iconGradient: pinkBlue,
                 icon: Icons.favorite,
                 title: "Our Mission",
                 body:
-                "We believe self-discovery is a journey worth celebrating. Quizzy helps you explore your unique personality traits through fun, science-backed quizzes.",
+                    "We believe self-discovery is a journey worth celebrating. Quizzy helps you explore your unique personality traits through fun, science-backed quizzes.",
               ),
-
               _infoCard(
                 context: context,
                 iconGradient: blueCyan,
                 icon: Icons.star,
                 title: "What We Do",
                 body:
-                "Our quizzes combine psychology research with engaging experiences to help you understand yourself better.",
+                    "Our quizzes combine psychology research with engaging experiences to help you understand yourself better.",
               ),
-
               _infoCard(
                 context: context,
                 iconGradient: green,
                 icon: Icons.group,
                 title: "The Team",
                 body:
-                "Created with passion by a team of psychologists, designers, and developers who love helping people grow.",
+                    "Created with passion by a team of psychologists, designers, and developers who love helping people grow.",
               ),
-
               const SizedBox(height: 16),
-
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(18),
@@ -235,7 +231,6 @@ class AboutScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -258,12 +253,12 @@ class AboutScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         _socialCircle(
-                          icon: const Icon(Icons.mail_outline, color: Colors.white),
+                          icon: const Icon(Icons.mail_outline,
+                              color: Colors.white),
                           isDark: isDark,
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 12),
                     const Text(
                       "hello@quizzy.app",
@@ -272,9 +267,7 @@ class AboutScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
-
               Text(
                 "Version 1.0.0",
                 style: TextStyle(
@@ -290,7 +283,6 @@ class AboutScreen extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-
               const SizedBox(height: 24),
             ],
           ),
